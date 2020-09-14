@@ -1,0 +1,46 @@
+{% load i18n %}
+{% load widget_tweaks %}
+{% load sub %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col col-md-10 mx-auto">
+
+            <div class="modal-block__title">{% trans "Supply" %}</div>
+            <div class="row">
+                <div class="col">
+                    {% include "app/includes/forms/field-modal.html" with field=form.available value=supply.remaining_quantity %}
+                </div>
+                <div class="col" v-bind:class="{ form_modal_error: hasError }">
+                    {% if request.remaining_quantity > supply.remaining_quantity %}
+                        {% include "app/includes/forms/field-modal.html" with field=form.attributed value=supply.remaining_quantity %}
+                    {% else %}
+                        {% include "app/includes/forms/field-modal.html" with field=form.attributed value=request.remaining_quantity %}
+                    {% endif %}
+                    <small class="form-text form-text-error" v-if="hasError">
+                        {{ "Attributed cannot be bigger than supply available quantity or the request quantity" }}
+                    </small>
+                     <small class="form-text form-text-error" v-if="isNegative">
+                        {{ "Attributed cannot be negative" }}
+                    </small>
+                </div>
+                <div class="col">
+                    {% if  request.remaining_quantity >= supply.remaining_quantity %}
+                        {% include "app/includes/forms/field-modal.html" with field=form.remaining value="0" %}
+                    {% else %}
+                        {% include "app/includes/forms/field-modal.html" with field=form.remaining value=supply.remaining_quantity|sub:request.remaining_quantity %}
+                    {% endif %}
+                </div>
+                <div class="col" hidden>
+                    {% include "app/includes/forms/field-modal.html" with field=form.requestQuantity value=request.remaining_quantity %}
+                </div>
+            </div>
+            <div>{% trans "The remaining supply availability will be updated." %}</div>
+            <div>{% trans "If the remaining availability equals 0, the supply will become unavailable." %}</div>
+        </div>
+    </div>
+
+{% endblock %}
+
+

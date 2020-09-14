@@ -1,0 +1,16 @@
+Django==3.0
+djangorestframework==3.11
+django-widget-tweaks==1.4.8
+psycopg2-binary==2.8.4
+gunicorn==20.0.4
+whitenoise==5.0.1
+flake8==3.7.9
+autopep8==1.5
+zest.releaser==6.20.0
+environ-config==19.1
+django-extensions==2.2.9
+django-import-export==2.0.2
+django-debug-toolbar==2.2
+pysocks==1.7.1
+unicodecsv==0.14.1
+sentry-sdk==0.14.4

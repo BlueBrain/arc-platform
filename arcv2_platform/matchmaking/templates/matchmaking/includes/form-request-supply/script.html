@@ -1,0 +1,18 @@
+{{ form.resource.value|json_script:"data-inject-resource" }}
+{{ form.resourceType.value|json_script:"data-inject-resourceType" }}
+{{ form.category.value|json_script:"data-inject-category" }}
+{{ form.item.value|json_script:"data-inject-item" }}
+{{ relations|json_script:"data-inject-relations" }}
+
+<script>
+    const data = arc.utils.load_json_script();
+
+    arc.page.supply_request_form({
+        resource: data.resource,
+        resourceType: data.resourceType,
+        category: data.category,
+        item: data.item,
+        relations: data.relations,
+        product_is_missing: {% if product_is_missing %}true{% else %}false{% endif %}
+    })
+</script>

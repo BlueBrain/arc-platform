@@ -1,0 +1,90 @@
+{% extends 'layout.html' %}
+
+{% load i18n %}
+{% load static %}
+
+{% block content %}
+
+    {% if not request.user.is_authenticated %}
+
+    {% else %}
+        <div class="container">
+            <div class="arc-sticky">
+                <div class="row page-title page-title-margin">
+                    <div class="col-12 col-sm-4">
+                        {% trans "Dashboard" %}
+                    </div>
+
+                    <div class="col-12 col-sm-8 text-right">
+                        {% if request.user.is_validator or request.user.is_moderator or request.user.is_requester %}
+                            {% include "matchmaking/includes/button-create.html" with text=_("Submit request") base_url_name="requests-create" %}
+                        {% endif %}
+                        {% if request.user.is_supplier %}
+                            {% include "matchmaking/includes/button-create.html" with text=_("Add supply") base_url_name="supplies-create" %}
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                {% if request.user.is_validator or request.user.is_moderator %}
+                    <div class="col">
+                        <dashboard-tile
+                                title="{% trans "Requests" %}"
+                                subtitle="{% trans "Open" %}"
+                                count="{{ request_open }}">
+                        </dashboard-tile>
+                        <dashboard-tile
+                                title="{% trans "Requests" %}"
+                                subtitle="{% trans "Added today" %}"
+                                count="{{ request_created_today }}">
+                        </dashboard-tile>
+                    </div>
+                    <div class="col">
+                        <dashboard-tile
+                                title="{% trans "Requests" %}"
+                                subtitle="{% trans "To be validated" %}"
+                                count="{{ request_to_be_validated }}">
+                        </dashboard-tile>
+                        <dashboard-tile
+                                title="{% trans "Requests" %}"
+                                subtitle="{% trans "Validated today" %}"
+                                count="{{ request_validated_today }}">
+                        </dashboard-tile>
+                    </div>
+                {% endif %}
+
+                {% if request.user.is_supplier %}
+                    <div class="col">
+                        <dashboard-tile
+                                title="{% trans "Supplies" %}"
+                                subtitle="{% trans "Available" %}"
+                                count="{{ supplies_available }}">
+                        </dashboard-tile>
+                        <dashboard-tile
+                                title="{% trans "Supplies" %}"
+                                subtitle="{% trans "Added today" %}"
+                                count="{{ supplies_created_today }}">
+                        </dashboard-tile>
+                    </div>
+                {% endif %}
+
+            </div>
+
+            <div class="row mt-5">
+                <div class="col col-md-10 mx-auto">
+                    <div class="dashboard-arcv2">
+                        arcv2
+                    </div>
+
+                    <div class="text-center mb-5 h2">
+                        {% trans "Match requests and supplies and together we ensure the best possible operation and scale up of COVID19 testing for health services." %}
+                    </div>
+
+                    <!-- An image to explain workflow can be put there -->
+
+                </div>
+            </div>
+        </div>
+    {% endif %}
+{% endblock %}

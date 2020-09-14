@@ -1,0 +1,289 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+
+{% load i18n %}
+{% load queryparams %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="arc-sticky">
+            <div class="row page-title page-title-margin">
+                <div class="col-12 col-sm-4">
+                    {% trans "Requests" %}
+                </div>
+
+                <div class="col-12 col-sm-8 text-right">
+                    {% include 'matchmaking/includes/help-button.html' with id='helpModal' %}
+                    {% if show_extra_fields %}
+                        <a class="btn btn-outline-primary text-uppercase small"
+                            href="?{% queryparams download="1" %}"
+                        >
+                            {% trans "Export" %}
+                        </a>
+                    {% endif %}
+
+                    {% if mode %}
+                        {% include "matchmaking/includes/button-create.html" with text=_("Submit request") base_url_name="requests-create" %}
+                    {% endif %}
+                </div>
+
+            </div>
+        </div>
+
+        <form class="arc-table-filters" method="GET" action="{% url 'requests' %}">
+            <div class="filter-bar row">
+                <div class="form-group col-6 col-md-4 col-xl-2">
+                    {% include "app/includes/table-filter.html"  with filter=filters.type %}
+                </div>
+                <div class="form-group col-6 col-md-4 col-xl-2">
+                    {% include "app/includes/table-filter.html"  with filter=filters.resource_type %}
+                </div>
+                <div class="form-group col-6 col-md-4 col-xl-2">
+                    {% include "app/includes/table-filter.html"  with filter=filters.priority %}
+                </div>
+                {% if show_extra_fields or owner_mode %}
+                    {% if mode != 'submitted' %}
+                        <div class="form-group col-6 col-md-4 col-xl-2">
+                            {% include "app/includes/table-filter.html" with filter=filters.status %}
+                        </div>
+                        <div class="form-group col-6 col-md-4 col-xl-2">
+                            {% include "app/includes/table-filter.html"  with filter=filters.expiration %}
+                        </div>
+                    {% endif %}
+                {% endif %}
+                {% if show_extra_fields and mode != 'submitted' or mode == 'own' %}
+                    <div class="form-group col-6 col-md-4 col-xl-2">
+                        {% include "app/includes/table-filter.html" with filter=filters.action %}
+                    </div>
+                {% endif %}
+
+                {% if mode %}
+                    <input type="hidden" id="mode" name="mode" value="{{ mode }}">
+                {% endif %}
+            </div>
+        </form>
+
+        <div class="arc-table-container">
+            <table class="table table-borderless arc-table">
+                <thead class="thead-dark">
+                <tr>
+                    {% if show_extra_fields or owner_mode %}
+                        <th scope="col">{% trans "ID" %}</th>
+                    {% endif %}
+
+                    <th scope="col" class="col--creation_time">{% trans "Creation date" %}</th>
+                    <th scope="col">{% trans "Type" %}</th>
+                    <th scope="col">{% trans "Request" %}</th>
+
+                    {% if show_extra_fields %}
+                        <th scope="col">{% trans "Requester" %}</th>
+                        {% if mode == 'submitted' %}
+                            <th scope="col">{% trans "Sensitive" %}</th>
+                        {% endif %}
+                        <th scope="col" class="text-right">{% trans "Quantity" %}</th>
+                    {% endif %}
+
+                    <th scope="col">{% trans "Priority" %}</th>
+
+                    <th scope="col">{% trans "Status" %}</th>
+
+                    {% if show_extra_fields and mode != 'submitted' %}
+                        <th scope="col" class="text-center">{% trans "To attrib." %}</th>
+                        <th scope="col" class="text-center">{% trans "To valid." %}</th>
+                        <th scope="col" class="text-center">{% trans "To close" %}</th>
+                    {% elif mode == 'own' %}
+                        <th scope="col" class="text-center">{% trans "To close" %}</th>
+                    {% endif %}
+
+                    {% if mode == 'submitted' %}
+                        <th scope="col" class="text-center">{% trans "Validation" %}</th>
+                    {% endif %}
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for request in object_list %}
+                    <tr {% if show_extra_fields or owner_mode %} class="clickable" {% endif %}
+                                                data-href="{% url 'request-detail' pk=request.id %}">
+                        {% if show_extra_fields or owner_mode %}
+                            <td>
+                                <a class="link" href="{% url 'request-detail' request.id %}">{{ request.id }}</a>
+
+                            </td>
+                        {% endif %}
+                        <td>
+                            {{ request.creation_time | date:"d/m/Y H:i" }}
+                        </td>
+                        <td>
+                            {{ request.resource.name }}
+                        </td>
+                        <td>
+                            {{ request.full_category_item }}
+                        </td>
+                        {% if show_extra_fields %}
+                            <td>
+                                {% if request.sensitive and not user.is_validator %}
+                                    <i class="fas fa-eye-slash icon-sensitive"></i>
+                                {% else %}
+                                    {{ request.email }}
+                                {% endif %}
+                            </td>
+
+                            {% if mode == 'submitted' %}
+                                <td class="text-center {% if request.sensitivity_can_be_set %}row--no-click{% endif %}">
+                                    {% comment %} Toggle request sensitivity badge {% endcomment %}
+                                    {% include "matchmaking/includes/sensitivity-toggle-badge.html" with request=request state_labels="Yes,No" %}
+                                </td>
+                            {% endif %}
+
+                            <td class="text-right">
+                                {% if mode != 'submitted' %}
+                                    {{ request.quantity_progress }}
+                                {% else %}
+                                    {{ request.quantity}}
+                                {% endif %}
+                            </td>
+
+                        {% endif %}
+
+                        {% if mode == 'submitted' and user.is_privileged and request.priority_can_be_set %}
+                            <td class="row--no-click">
+                                {% comment %} Set request priority badge {% endcomment %}
+                                {% include "matchmaking/includes/priority-set-badge.html" with request=request %}
+                            </td>
+                        {% else %}
+                            <td>
+                                <span class="badge badge-{{ request.priority }}">
+                                    {{ request.priority }}
+                                </span>
+                            </td>
+                        {% endif %}
+
+                        <td>
+                            <span class="request-status request-status-{{ request.status }}">
+                                {{ request.status }}
+                                {% if request.is_expiring %}
+                                    <br/>
+                                    <span class="request-expiring">expiring</span>
+                                {% endif %}
+                            </span>
+                        </td>
+
+                        {% if show_extra_fields and mode != 'submitted' %}
+                            <td class="text-center">
+                                {% if request.is_open %}
+                                    <a href="#"
+                                    class="btn btn-match-count {% if request.quantity_to_attribute == 0 %} btn-match-count-disable {% else %} btn-outline-primary {% endif %}">{{ request.quantity_to_attribute }}</a>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                {% if request.is_open %}
+                                    <a href="#"
+                                    class="btn btn-match-count {% if request.quantity_to_validate == 0 %} btn-match-count-disable {% else %} btn-outline-primary {% endif %}">{{ request.quantity_to_validate }}</a>
+                                {% endif %}
+                            </td>
+                            <td class="text-center">
+                                {% if request.is_open %}
+                                    <a href="#"
+                                    class="btn btn-match-count {% if request.quantity_to_close == 0 %} btn-match-count-disable {% else %} btn-outline-primary {% endif %}">{{ request.quantity_to_close }}</a>
+                                {% endif %}
+                            </td>
+                        {% elif mode == 'own' %}
+                            <td class="text-center">
+                                {% if request.is_open %}
+                                    <a href="#"
+                                    class="btn btn-match-count {% if request.quantity_to_close == 0 %} btn-match-count-disable {% else %} btn-outline-primary {% endif %}">{{ request.quantity_to_close }}</a>
+                                {% endif %}
+                            </td>
+                        {% endif %}
+
+                        {% if mode == 'submitted' %}
+                            {% with request_id=request.id|stringformat:"s" %}
+                                <td class="text-center row--no-click white-space-no-wrap">
+                                    {% if request.status == 'submitted'%}
+                                        {% with "validate-modal-"|add:request_id|add:"-request" as id_modal %}
+                                            <span data-toggle="modal" data-target="#{{ id_modal }}">
+                                                <button
+                                                    class="btn btn-success btn-sm"
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title="Validate request"
+                                                >
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                            </span>
+                                        {% endwith %}
+
+                                        {% with "reject-modal-"|add:request_id|add:"-request" as id_modal %}
+                                            <span data-toggle="modal" data-target="#{{ id_modal }}">
+                                                <button
+                                                    class="btn btn-danger btn-sm"
+                                                    data-toggle="tooltip"
+                                                    data-placement="top"
+                                                    title="Reject request"
+                                                >
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                            </span>
+
+                                            {{ current_path }}
+                                        {% endwith %}
+
+                                        {% with "validate-modal-"|add:request_id|add:"-request" as id_modal %}
+                                            <div class="text-left white-space-normal">
+                                                {% comment %} Validate request modal {% endcomment %}
+                                                {% trans "Validate request" as title %}
+                                                {% trans "The request will be set to Open and available for attribution." as message %}
+                                                {% url "request-validate" pk=request_id as url_link %}
+                                                {% with url_link|add:'?redirect_url='|add:request_full_path as modal_url_link %}
+                                                    {% include "app/includes/modals/simple-modal.html" with id=id_modal title=title message=message url=modal_url_link %}
+                                                {% endwith %}
+                                            </div>
+                                        {% endwith %}
+
+                                        {% with "reject-modal-"|add:request_id|add:"-request" as id_modal %}
+                                            <div class="text-left white-space-normal">
+                                                {% comment %} Reject request modal {% endcomment %}
+                                                {% url "request-reject" pk=request_id as url_link %}
+                                                {% include "app/includes/modals/reject-request-modal.html" with id=id_modal url=url_link redirect_url=request_full_path %}
+                                            </div>
+                                        {% endwith %}
+                                    {% endif %}
+
+                                </td>
+                            {% endwith %}
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if object_list|length == 0 %}
+            <div class="text-center empty-state">
+                - {% trans "No requests available" %} -
+            </div>
+        {% endif %}
+
+
+        {% include "app/includes/pagination.html" with paginator=page_obj %}
+
+
+    </div>
+
+    {% include 'matchmaking/includes/help-modal.html' with id='helpModal' %}
+{% endblock %}
+
+{% block script %}
+    {% if show_extra_fields or owner_mode %}
+        <script src="{% static 'src/js/clickable-rows.js' %}"></script>
+    {% endif %}
+
+    <script>
+        document.querySelectorAll('.reject-request-modal').forEach(node => {
+            arc.page.reject_request_form(node);
+        });
+    </script>
+{% endblock %}

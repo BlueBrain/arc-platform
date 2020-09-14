@@ -1,0 +1,16 @@
+Dear academic partner,
+
+We thank you for having replied to the call to provide critical resources needed by diagnostic laboratories.
+In order to keep the database of available supplies up to date, we would need you to check your supply at the URLs provided below and click on the 'Close Supply' button if the supply is not available anymore.
+
+{% for supply in supplies %} * {{ deployment_base_url }}/supplies/{{ supply.id }}
+{% endfor %}
+
+Thank you for your support in the fight against COVID-19.
+
+
+To unsubscribe from notifications, please open the link {{ unsubscribe_url }} in a browser.
+
+
+Regards,
+the ARC platform

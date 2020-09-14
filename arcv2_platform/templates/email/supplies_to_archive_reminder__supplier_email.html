@@ -1,0 +1,38 @@
+<p>
+    Dear academic partner,
+</p>
+
+<p>
+    We thank you for having replied to the call to provide critical resources
+    needed by diagnostic laboratories. <br/>
+    In order to keep the database of available supplies up to date,
+    we would need you to check your supply at the URLs provided below
+    and click on the 'Close Supply' button if the supply is not available anymore.
+</p>
+
+<p>
+    <ul>
+        {% for supply in supplies %}
+            <li>
+                <a href="{{ deployment_base_url }}/supplies/{{ supply.id }}">{{ supply }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</p>
+
+<p>
+    Thank you for your support in the fight against COVID-19.
+</p>
+
+<br/>
+
+<p>
+    To unsubscribe from notifications, please click <a href="{{ unsubscribe_url }}">here</a>.
+</p>
+
+<br/>
+
+<p>
+    Regards, <br/>
+    the ARC platform
+</p>

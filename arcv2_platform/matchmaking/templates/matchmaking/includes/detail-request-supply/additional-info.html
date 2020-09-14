@@ -1,0 +1,29 @@
+{% load i18n %}
+
+<div class="collapse additional-info" id="additional-info-block">
+    <div class="row">
+        <div class="col">
+            <p class="details-info-label">
+                {% blocktrans with creator_firstname=item.creator.firstname creator_lastname=item.creator.lastname creation_date=item.creation_time|date:"d/m/Y H:i" %}
+                    Created by {{ creator_firstname }} {{ creator_lastname }} on {{ creation_date }}
+                {% endblocktrans %}
+            </p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <p class="details-info-label">
+            {% if not item.is_closed %}
+                {% blocktrans with updater_firstname=item.updater.firstname updater_lastname=item.updater.lastname edition_date=item.update_time|date:"d/m/Y H:i" %}
+                    Last edited
+                    by {{ updater_firstname }} {{ updater_lastname }} on {{ edition_date }}
+                {% endblocktrans %}
+            {% else %}
+                {% blocktrans with updater_firstname=item.updater.firstname updater_lastname=item.updater.lastname edition_date=item.update_time|date:"d/m/Y H:i" %}
+                    Closed by {{ updater_firstname }} {{ updater_lastname }} on {{ edition_date }}
+                {% endblocktrans %}
+            {% endif %}
+            </p>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+{% load i18n %}
+
+{% if request.user.is_authenticated %}
+    <ul class="navbar-nav mr-right">
+        <li class="nav-item dropdown nav-item-right">
+            <a class="nav-link dropdown-toggle link" href="#" id="dropdown01"
+               data-toggle="dropdown" aria-haspopup="true"
+               aria-expanded="false">{{ request.user.email }}</a>
+            <div class="dropdown-menu dropdown-menu--user dropdown-menu-right" aria-labelledby="dropdown01">
+                <a class="dropdown-item" href="/users/logout">Logout</a>
+            </div>
+        </li>
+    </ul>
+{% else %}
+    <a class="btn btn-primary text-uppercase small" href="{% url 'sso-login' %}">{% trans 'Switch Login' %}</a>
+    {% if config.allow_password_login %}
+        <a class="nav-link link ml-2"
+           href="{% url 'login' %}">{% trans 'Password login' %}</a>
+    {% endif %}
+{% endif %}

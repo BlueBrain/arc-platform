@@ -1,0 +1,23 @@
+
+{% load i18n %}
+
+{% with match_id=match.id|stringformat:"s" %}
+    {% with "validate-modal-"|add:match_id|add:"-match" as id_modal %}
+        <span data-toggle="modal" data-target="#{{ id_modal }}">
+            <button
+                class="btn btn-success"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Validate match"
+            >
+                <i class="fas fa-check"></i>
+            </button>
+        </span>
+
+        <div class="text-left white-space-normal">
+            {% comment %} Validate supply modal {% endcomment %}
+            {% url "request-validate-attribution" pk=object.id  match_id=match.id as url %}
+            {% include "app/includes/modals/validate-attribution-modal.html" with id=id_modal form=form supply=match.supply url=url request=request %}
+        </div>
+    {% endwith %}
+{% endwith %}

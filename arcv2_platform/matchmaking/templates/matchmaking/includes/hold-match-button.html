@@ -1,0 +1,26 @@
+
+{% load i18n %}
+
+{% with match_id=match.id|stringformat:"s" %}
+    {% with "hold-supply-modal-"|add:match_id|add:"-match" as id_modal %}
+        <span data-toggle="modal" data-target="#{{ id_modal }}">
+            <button
+                class="btn btn-warning"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Put match on hold"
+            >
+                <i class="fas fa-pause"></i>
+            </button>
+
+        </span>
+
+        <div class="text-left white-space-normal">
+            {% comment %} Hold supply modal {% endcomment %}
+            {% trans "Put supply attribution on hold" as title %}
+            {% trans "The selected supply will be put on hold for current request with following reason:" as message %}
+            {% url "request-supply-hold" pk=request.id match_id=match.id as url %}
+            {% include "app/includes/modals/confirm-w-text-modal.html" with id=id_modal title=title message=message url=url %}
+        </div>
+    {% endwith %}
+{% endwith %}

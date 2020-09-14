@@ -1,0 +1,104 @@
+{% load i18n %}
+
+{% comment %}
+to call this modal import the template with request id and url,
+in the button which calls modal add attributes data-toggle="modal" data-target="#id"
+{% endcomment %}
+
+<div
+    class="modal fade reject-request-modal"
+    id="{{ id }}"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="{{ id }}"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <form method="post" novalidate id="reject_request" action="{{ url }}">
+                {% csrf_token %}
+
+                <div class="row">
+                    <div class="col col-md-11 mx-auto text-right modal-close">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-md-10 mx-auto">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{% trans 'Reject request'|upper %}</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col col-md-10 mx-auto">
+                        <div class="modal-body">
+                            <p>
+                                {% trans "The request will be set to Rejected with a reason below." %}
+                            </p>
+                            <textarea
+                                id="status_reason"
+                                class="form-control"
+                                name="status_reason"
+                                cols="40"
+                                rows="4"
+                                maxlength="500"
+                                v-model="statusReason"
+                            ></textarea>
+
+                            <div class="form-check mt-3">
+                                <input
+                                    type="checkbox"
+                                    class="form-check-input"
+                                    id="status_reason_sensitive_checkbox"
+                                    v-model="statusReasonSensitive"
+                                    name="status_reason_sensitive"
+                                />
+                                <label
+                                    for="status_reason_sensitive_checkbox"
+                                    class="form-check-label"
+                                >
+                                    {% trans 'Rejection reason is sensitive (not visible for Requester)' %}
+                                </label>
+
+                                {% if redirect_url %}
+                                    <input
+                                        type="hidden"
+                                        name="redirect_url"
+                                        value="{{ redirect_url }}"
+                                    />
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col col-md-10 mx-auto">
+                        <div class="modal-footer">
+                            <a
+                                class="btn btn-outline-primary text-uppercase small"
+                                href="#"
+                                data-dismiss="modal"
+                            >
+                                {% trans "Cancel" %}
+                            </a>
+                            <button
+                                class="btn btn-primary text-uppercase small"
+                                type="submit"
+                                name="submit"
+                                :disabled="!formValid"
+                            >
+                                {% trans "Confirm" %}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,32 @@
+//
+.dropdown-menu {
+    a {
+        line-height: 40px;
+        padding-right: 45px;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+    }
+
+    &.dropdown-menu--user {
+        margin-top: -20px;
+        z-index: 1040;
+    }
+}
+
+
+.dropdown-menu-primary {
+    background: $primary;
+
+    a {
+        color: white;
+
+        &:hover {
+            background: mix($primary, black, 80%);
+            color: white;
+        }
+    }
+}
+
+.dropdown-menu-outline {
+
+}

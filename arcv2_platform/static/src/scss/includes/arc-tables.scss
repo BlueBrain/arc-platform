@@ -1,0 +1,71 @@
+
+.arc-table-container {
+    width: 100%;
+    overflow-x: scroll;
+}
+
+.arc-table {
+
+    thead {
+        tr {
+            font-size: 10px;
+            line-height: 10px;
+
+            th.col--creation_time {
+                min-width: 120px;
+            }
+        }
+    }
+
+    tbody {
+        tr {
+            font-size: 12px;
+            line-height: 14px;
+            color: $dark-blue;
+
+            td {
+                $h: 56px;
+                height: $h;
+                vertical-align: middle;
+            }
+        }
+    }
+
+    tr {
+        border-bottom: 4px solid $light;
+
+        th, td {
+            background-color: white;
+            &.details-supply {
+                background-color: #F5F7FA;
+            }
+        }
+
+        th {
+            text-transform: uppercase;
+            font-weight: normal;
+        }
+    }
+
+
+}
+
+
+.arc-table-filters {
+    .form-group {
+        margin-bottom: 0;
+        margin-top: 12px;
+
+        label {
+            color: $gray-600;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+
+        select {
+            height: 45px;
+            color: $dark-blue;
+        }
+    }
+}

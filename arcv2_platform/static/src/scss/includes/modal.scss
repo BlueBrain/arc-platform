@@ -1,0 +1,75 @@
+.modal-content {
+    background-color: $light;
+}
+
+.modal-header{
+    border-bottom: none;
+    padding-top : 0;
+    font-size: 20px;
+    letter-spacing: 0.5px;
+}
+
+.modal-attribution-content{
+    max-width : 830px;
+    max-height : 446px;
+}
+
+.modal-close{
+    padding-top :20px;
+}
+.modal-close i {
+    color : $gray-600;
+}
+
+.modal-body{
+    font-size: 14px;
+}
+
+.modal-footer{
+    border-top: none;
+    padding-bottom :44px;
+}
+
+.validate-attribution-modal-body{
+    background: white;
+    padding-top: 24px;
+    padding-bottom: 24px;
+}
+
+.modal-block__title{
+    @extend .text-primary;
+    @extend .h6;
+    text-transform: uppercase;
+    font-size: 12px;
+    margin-bottom: 30px;
+    letter-spacing: 0.5px;
+    font-weight: bold;
+}
+
+.label-modal{
+    color : $gray-600;
+    font-weight: bold;
+    font-size:12px;
+}
+
+.form-control:disabled{
+    border : none;
+    background-color: $gray-disable;
+}
+
+.form_modal_error input {
+    border : 1px solid $red;
+}
+
+.form_modal_error label {
+    color : $red;
+}
+
+.form-text-error{
+    color : $red;
+}
+
+.form_modal_error input:focus {
+    border : 1px solid $red;
+    box-shadow: 0 0 0 0.2rem rgba(238, 63, 32, 0.25);
+}

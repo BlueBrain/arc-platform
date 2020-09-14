@@ -1,0 +1,10 @@
+{% load i18n %}
+
+<label for="filter-{{ filter.name }}">{{ filter.title }}</label>
+<select id="filter-{{ filter.name }}" class="form-control filter-select" name={{ filter.name }} onchange="this.form.submit()" {% if filter.options|length == 0 %}disabled{% endif %}>
+    {% trans "All" as all %}
+    {% include "app/includes/forms/forms-select-option.html" with selected=priority value="" text=all %}
+    {% for option in filter.options %}
+        {% include "app/includes/forms/forms-select-option.html" with selected=filter.value value=option.0 text=option.1 %}
+    {% endfor %}
+</select>

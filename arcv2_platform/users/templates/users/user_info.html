@@ -1,0 +1,28 @@
+{% extends 'layout.html' %}
+
+{% load i18n %}
+
+{% block content %}
+    <div class="container">
+        <div class="arc-sticky">
+            <div class="row page-title page-title-margin">
+                <div class="col">
+                    <a class="page-title-back" href="{% url 'users' %}">
+                        < {% trans "Back to Users" %}
+                    </a>
+                    <div class="page-title">
+                        {% trans title %}
+                    </div>
+                </div>
+                <div class="col text-right">
+                    <button class="btn btn-primary text-uppercase small" type="button" onclick="location.href='{% url 'users-edit' pk=user_data.id %}';">
+                        {% trans "Edit" %}
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        {% include "app/includes/accordion/accordion-user.html"  with author=user_data data=user_data title=accordion_title sub_title=role  %}
+
+    </div>
+{% endblock %}

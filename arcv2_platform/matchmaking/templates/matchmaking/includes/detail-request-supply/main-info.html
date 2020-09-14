@@ -1,0 +1,181 @@
+{% load i18n %}
+
+<div class="bg-white main-request-info">
+
+    <div class="row">
+
+        <div class="col col-1">
+            <div class="text-right pt-3">
+                <a data-toggle="collapse" href="#additional-info-block" role="button" aria-expanded="false">
+                    <i class="fas fa-chevron-right chevron-right"></i>
+                    <i class="fas fa-chevron-down chevron-down"></i>
+                </a>
+            </div>
+        </div>
+
+        <div class="col col-11">
+            <div class="main-info-line">
+                <div>
+                    <p class="pr-3">
+                        <span class="main-request-info-title">
+                            {% if object.category %}
+                                {{ object.category_item }}
+                            {% else %}
+                                {% blocktrans with resource_type=object.resourceType %}
+                                    Any {{ resource_type }}
+                                {% endblocktrans %}
+                            {% endif %}
+                            {% if object.item_catalog_number %}
+                                ({{ object.item_catalog_number }})
+                            {% endif %}
+                        </span>
+                    </p>
+                </div>
+                <div class="quantity-block">
+                    {% blocktrans with quantity=object.remaining_quantity %}
+                        <span class="remaining-quantity-value">{{ quantity }}</span>
+                        <span class="remaining-quantity"> remaining {{ requestedOrAvailable }} qty.</span>
+                    {% endblocktrans %}
+                </div>
+            </div>
+
+            <div class="main-info-line">
+                <div>
+                    {% if object_type == 'request' %}
+                        {% if user.is_privileged and object.priority_can_be_set %}
+                            {% comment %} Set request priority badge {% endcomment %}
+                            {% include "matchmaking/includes/priority-set-badge.html" with request=object %}
+                        {% else %}
+                            <span class="badge badge-{{ object.priority }}">
+                                {{ object.priority }}
+                            </span>
+                        {% endif %}
+                    {% endif %}
+                </div>
+                <div>
+                    <p class="validated-supplies">
+                        {% blocktrans with validated=object.quantity_validated total_quantity=object.quantity %}
+                            {{ validated }} validated supplies attribution - {{ total_quantity }} total
+                            {{ requestedOrAvailable }} qty.
+                        {% endblocktrans %}
+                    </p>
+                </div>
+            </div>
+
+            <div class="author-info-container mt-4">
+                <div class="flex-grow-1">
+                    {% if object_type == 'request' and user.is_validator %}
+                        <p class="mb-4">
+                            {% comment %} Toggle request sensitivity badge {% endcomment %}
+                            {% include "matchmaking/includes/sensitivity-toggle-badge.html" with request=object state_labels="Sensitive,Not sensitive" %}
+                        </p>
+                    {% endif %}
+                    <div class="row mb-4">
+                        <div class="col col-6">
+                            <span class="details-info-label">{% trans 'Fullname' %}</span>
+                            <span>{{ object.fullname }} {{ object.role }}</span>
+                        </div>
+                        <div class="col col-6">
+                            <span class="details-info-label">{% trans 'Affiliation' %}</span>
+                            <span>{{ object.affiliation }}</span>
+                        </div>
+                    </div>
+                    <div class="row mb-4">
+                        <div class="col col-6">
+                            <span class="details-info-label">{% trans 'Email' %}</span>
+                            <span>{{ object.email }}</span>
+                        </div>
+                        <div class="col col-6">
+                            <span class="details-info-label">{% trans 'Phone' %}</span>
+                            <span>{{ object.phone }}</span>
+                        </div>
+                    </div>
+
+                    {% if object.status == 'rejected' and object.status_reason %}
+                        {% if user.is_validator or not object.status_reason_sensitive %}
+                            <div class="row mb-4">
+                                <div class="col col-12">
+                                    <span class="details-info-label">Rejection reason</span>
+                                    <span>{{ object.status_reason }}</span>
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+
+                </div>
+                <!-- <div>
+                    {% include "matchmaking/includes/button-create.html" with text=button_text base_url_name=base_url_name clone=object.id %}
+                </div> -->
+            </div>
+
+            {% if object.has_address %}
+                <div>
+                    <div class="details-info-label mb-2">{% trans 'Pickup address' %}</div>
+                    <p>
+                        {{ object.company }}<br>
+                        {{ object.street_name }} {{ object.street_number }}<br>
+                        {{ object.zip }} {{ object.city }}
+                    </p>
+                </div>
+            {% endif %}
+
+            {% if object.author_comment %}
+                <div class="main-info-line">
+                    <div>
+                        <p class="details-info-label">{% trans 'Comment' %}</p>
+                        <p>{{ object.author_comment }}</p>
+                    </div>
+                </div>
+            {% endif %}
+
+            {% if not object.category.is_validated %}
+                <div class="alert alert-danger">
+                    {% url 'validate-category' object.category.pk as category_url %}
+
+                    {% if object_type == 'request' %}
+                        {% blocktrans with manufacturer=object.category.name url=category_url id=object.pk %}
+                            The requester asked to add a new manufacturer named <i>{{ manufacturer }}</i> when creating
+                            this request.
+                            <a href="{{ url }}?request_id={{ id }}" class="alert-link">Create the manufacturer</a>.
+                        {% endblocktrans %}
+                    {% else %}
+                        {% blocktrans with manufacturer=object.category.name url=category_url id=object.pk %}
+                            The supplier asked to add a new manufacturer named <i>{{ manufacturer }}</i> when creating
+                            this supply.
+                            <a href="{{ url }}?supply_id={{ id }}" class="alert-link">Create the manufacturer</a>.
+                        {% endblocktrans %}
+                    {% endif %}
+                </div>
+            {% endif %}
+
+            {% if user.is_moderator or user.is_validator %}
+                {% if not object.item.is_validated %}
+                    <div class="alert alert-danger">
+                        {% url 'validate-item' object.item.pk as item_url %}
+
+                        {% if object_type == 'request' %}
+                            {% blocktrans with name=object.item.name url=item_url id=object.pk %}
+                                The requester asked to add a new item named <i>{{ name }}</i> when creating this
+                                request. <a href="{{ url }}?request_id={{ id }}" class="alert-link">Create the item</a>
+                            {% endblocktrans %}
+                        {% else %}
+                            {% blocktrans with name=object.item.name url=item_url id=object.pk %}
+                                The supplier asked to add a new item named <i>{{ name }}</i> when creating this
+                                supply. <a href="{{ url }}?supply_id={{ id }}" class="alert-link">Create the item</a>
+                            {% endblocktrans %}
+                        {% endif %}
+
+                        {% if not object.category.is_validated %}
+                            {% blocktrans with manufacturer=object.category.name %}
+                                (this will automatically add a manufacturer named <i>{{ manufacturer }}</i>)
+                            {% endblocktrans %}
+                        {% endif %}.
+                    </div>
+                {% endif %}
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>

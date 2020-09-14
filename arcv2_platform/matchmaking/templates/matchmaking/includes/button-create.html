@@ -1,0 +1,5 @@
+<button class="btn {% if not clone %}btn-primary{% else %}btn-outline-primary{% endif %} text-uppercase small"
+        type="button"
+        onclick="location.href='{% url base_url_name %}{% if clone %}?source={{ clone }}{% endif %}';">
+    {{ text }}
+</button>

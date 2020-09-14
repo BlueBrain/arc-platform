@@ -1,0 +1,44 @@
+{% load i18n %}
+
+{% comment %}
+to call this modal import the template with id, title, message and url ino
+in button calling modal add attributes data-toggle="modal" data-target="#id"
+{% endcomment %}
+
+<div class="modal fade" id="{{ id }}" tabindex="-1" role="dialog" aria-labelledby="{{ id }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="row">
+                <div class="col col-md-11 mx-auto text-right modal-close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col col-md-10 mx-auto">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">{% trans title|upper %}</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col col-md-10 mx-auto">
+                    <div class="modal-body">
+                        {% trans message %}
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col col-md-10 mx-auto">
+                    <div class="modal-footer">
+                        <a class="btn btn-outline-primary text-uppercase small" href="#" data-dismiss="modal">{% trans "Cancel" %}</a>
+                        <a class="btn btn-primary text-uppercase small" {% if url %} href="{{ url }}" {% endif %}>{% trans "Confirm" %}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

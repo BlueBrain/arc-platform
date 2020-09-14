@@ -1,0 +1,49 @@
+.accordion-block {
+    background: white;
+    padding-top: 32px;
+    padding-bottom: 32px;
+    font-size: 14px;
+    line-height: 18px;
+}
+
+.sub-accordion-block {
+    background-color: $gray-100;
+    padding-top: 27px;
+    padding-bottom: 27px;
+    color: $gray-600;
+    font-size: 12px;
+    line-height: 18px;
+    font-weight: bold;
+
+}
+
+.header-accordion{
+    font-size: 24px;
+    padding-bottom: 24px;
+}
+
+.header-block{
+    display:flex;
+    align-items: center;
+    line-height: 30px;
+}
+
+.dropdown-accordion{
+    font-size: 12px;
+    padding-right: 0;
+    align-self: self-start;
+    padding-top:10px;
+}
+
+.sub-title-block{
+    align-self: self-start;
+    margin-right:50px;
+    padding-top:10px;
+}
+
+a[aria-expanded=true] .chevron-right {
+    display: none;
+}
+a[aria-expanded=false] .chevron-down {
+    display: none;
+}

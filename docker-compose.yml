@@ -1,0 +1,20 @@
+version: '3'
+
+# Additional configuration is in docker-compose.override.yml for dev environment
+# and in docker-compose.prod.yml for prod environment.
+
+services:
+  db:
+    image: postgres:12
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: arcv2_platform
+    ports:
+      - "5432:5432"
+  web:
+    build: .
+    image: ch_apptitude_arcv2:latest
+    depends_on:
+      - db
+    restart: on-failure

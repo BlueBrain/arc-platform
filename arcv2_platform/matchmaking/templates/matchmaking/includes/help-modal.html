@@ -1,0 +1,125 @@
+{% load i18n %}
+
+<div class="modal fade" id="{{ id }}" tabindex="-1" role="dialog" aria-labelledby="{{ id }}" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-xl help-modal-dialog" role="document">
+        <div class="modal-content help-modal-content">
+            <div class="row">
+                <div class="col col-md-11 mx-auto text-right modal-close">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            </div>
+
+            <span class="help-modal-title">
+                    {% trans 'Help' %}
+            </span>
+
+            <div class="help-modal-section mt-5">
+                <span class="help-modal-section-title">{% trans 'Request status' %}</span>
+
+                <div class="row help-modal-item">
+                    <div class="col-3">
+                        <span class="request-status request-status-open">{% trans 'Open' %}</span>
+                    </div>
+                    <div class="col-9">
+                        <p class="help-modal-text">A request is open as long as the supplier is looking for the
+                            equipment, reagent, consumable, know-how or personnel. While a request is open, it is
+                            possible for the moderators and validators to find supplies and to attribute them to the
+                            request.</p>
+                    </div>
+                </div>
+
+                <div class="row help-modal-item">
+                    <div class="col-3">
+                        <span class="request-status request-status-closed">{% trans 'Closed' %}</span>
+                    </div>
+                    <div class="col-9">
+                        <p class="help-modal-text">A request can be closed when the need has been fulfilled. This action
+                            is set manually by the moderator or validator. A request cannot be closed as long as there
+                            is at least one attributed supply with the status “on going attribution”.</p>
+                    </div>
+                </div>
+
+                <div class="row help-modal-item">
+                    <div class="col-3">
+                        <span class="request-status request-status-archived">{% trans 'Archived' %}</span>
+                    </div>
+                    <div class="col-9">
+                        <p class="help-modal-text">A request can be archived only when no supply is attributed to the
+                            request. A archived supply may indicate that the request is a duplicate, or that the request
+                            has been provided in another way.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="help-modal-section mt-5">
+                <span class="help-modal-section-title">{% trans 'Supply status' %}</span>
+
+                <div class="row help-modal-item">
+                    <div class="col-3">
+                        <span class="supply-status supply-status-available">{% trans 'Available' %}</span>
+                    </div>
+                    <div class="col-9">
+                        <p class="help-modal-text">A request is available as long as the supplier offers the equipment,
+                            reagent, consumable, know-how or personnel. While a supply is available, it is possible for
+                            the moderators and validators to attribute it to a request.</p>
+                    </div>
+                </div>
+
+                <div class="row help-modal-item">
+                    <div class="col-3">
+                        <span class="supply-status supply-status-ongoing_attribution">{% trans 'On going attribution' %}</span>
+                    </div>
+                    <div class="col-9">
+                        <p class="help-modal-text">A request is on going attribution when the supply is attributed to a
+                            request. A validator need to validate or to dismiss manually the request attribution.</p>
+                    </div>
+                </div>
+
+                <div class="row help-modal-item">
+                    <div class="col-3">
+                        <span class="supply-status supply-status-attributed">{% trans 'Attributed' %}</span>
+                    </div>
+                    <div class="col-9">
+                        <p class="help-modal-text">A request is attributed when a supply has been validated for an
+                            attributed request.</p>
+                    </div>
+                </div>
+
+                <div class="row help-modal-item">
+                    <div class="col-3">
+                        <span class="supply-status supply-status-closed">{% trans 'Closed' %}</span>
+                    </div>
+                    <div class="col-9">
+                        <p class="help-modal-text">A supply can be closed when the supply has been attributed. This
+                            action is set manually by the moderator or validator. A supply cannot be closed when its
+                            status is “on going attribution” nor when when there is no attributed request.</p>
+                    </div>
+                </div>
+
+                <div class="row help-modal-item">
+                    <div class="col-3">
+                        <span class="supply-status supply-status-archived">{% trans 'Archived' %}</span>
+                    </div>
+                    <div class="col-9">
+                        <p class="help-modal-text">A supply can be archived only when no request is attributed to the
+                            supply. A archived supply may indicate that the supply is a duplicate, or that the supply
+                            has been offered in some other way.</p>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="row">
+                <div class="col col-md-10 mx-auto">
+                    <div class="modal-footer">
+                        <a class="btn btn-primary text-uppercase small mt-4" href="#"
+                           data-dismiss="modal">{% trans "Close" %}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

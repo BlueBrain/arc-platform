@@ -1,0 +1,14 @@
+{% if messages %}
+    <div class="arc-toast-wrapper">
+        {% for message in messages %}
+            <div class="arc-toast {% if message.tags %}arc-toast-{{ message.tags }}{% endif %}" data-toast
+                 role="alert" aria-live="assertive" aria-atomic="true">
+                <span class="mr-auto align-self-start">{{ message | safe }}</span>
+                <button type="button" class="arc-toast__cross " data-dismiss="toast"
+                        aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}

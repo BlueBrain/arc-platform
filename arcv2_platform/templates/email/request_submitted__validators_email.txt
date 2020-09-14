@@ -1,0 +1,7 @@
+Dear validator,
+
+A new request has been submitted for your validation: {{ deployment_base_url }}/requests/{{ request.id }}
+
+
+Regards,
+the ARC platform

@@ -1,0 +1,31 @@
+
+{% with request_id=request.id|stringformat:"s" %}
+    {% with "toggle-sensitivity-modal-"|add:request_id|add:"-request" as id_modal %}
+        {% if request.sensitivity_can_be_set %}
+            <a
+                href='#'
+                data-toggle="modal"
+                data-target="#{{ id_modal }}"
+            >
+                <span
+                    class="badge badge-{{ request.sensitive|yesno:'high,light' }}"
+                >
+                    {{ request.sensitive|yesno:state_labels }}
+                    <i class="fas fa-edit"></i>
+                </span>
+            </a>
+
+            <div class="text-left white-space-normal">
+                {% comment %} Set request priority modal {% endcomment %}
+                {% url "request-set-sensitivity" pk=request_id as url_link %}
+                {% include "app/includes/modals/toggle-request-sensitivity-modal.html" with id=id_modal url=url_link redirect_url=request_full_path %}
+            </div>
+        {% else %}
+            <span
+                class="badge badge-{{ request.sensitive|yesno:'high,light' }}"
+            >
+                {{ request.sensitive|yesno:state_labels }}
+            </span>
+        {% endif %}
+    {% endwith %}
+{% endwith %}

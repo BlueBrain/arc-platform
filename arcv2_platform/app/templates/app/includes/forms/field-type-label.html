@@ -1,0 +1,17 @@
+{% load i18n %}
+{% load widget_tweaks %}
+
+
+<div class="form-group form-group--label {% if class %}{{ class }}{% endif %}">
+    {% with WIDGET_ERROR_CLASS='is-invalid' %}
+        <div class="d-flex">
+            {% render_field field class="form-check-input" %}
+            <label class="form-check-label {% if field.errors %}text-danger{% endif %}"
+                   for="{{ field.id_for_label }}">{% trans field.help_text %}</label>
+        </div>
+    {% endwith %}
+
+    {% if field.errors %}
+        {% include "app/includes/forms/field-errors.html" %}
+    {% endif %}
+</div>

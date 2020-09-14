@@ -1,0 +1,84 @@
+{% extends 'layout.html' %}
+
+{% load i18n %}
+{% load queryparams %}
+
+{% block content %}
+    <div class="container">
+        <div class="arc-sticky">
+            <div class="row page-title page-title-margin">
+                <div class="col">
+                    {% trans "Users" %}
+                </div>
+                <div class="col text-right">
+                    <a class="btn btn-outline-primary text-uppercase small"
+                       href="?{% queryparams download="1" %}"
+                    >
+                        {% trans "Export" %}
+                    </a>
+                    <button class="btn btn-primary text-uppercase small" type="button" onclick="location.href='{% url 'users-create' %}';">
+                        Add user
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <form class="arc-table-filters" method="GET" action="{% url 'users' %}">
+            <div class="row">
+                <div class="col col-lg-3">
+                    <div class="form-group">
+                        {% include "app/includes/table-filter.html"  with filter=filters.role %}
+                    </div>
+                </div>
+            </div>
+        </form>
+
+        <div class="arc-table-container">
+            <table class="table table-borderless arc-table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">{% trans "ID" %}</th>
+                    <th scope="col">{% trans "First name" %}</th>
+                    <th scope="col">{% trans "Last name" %}</th>
+                    <th scope="col">{% trans "Affiliation" %}</th>
+                    <th scope="col">{% trans "Roles" %}</th>
+                    <th scope="col">{% trans "Super admin" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for user in object_list %}
+                    <tr>
+                        <td><a href="{% url 'users-info' pk=user.id %}">{{ user.email }}</a></td>
+                        <td>{{ user.firstname }}</td>
+                        <td>{{ user.lastname }}</td>
+                        <td>
+                            {% if user.affiliation %}
+                                {{ user.affiliation }}
+                            {% else %}
+                                -
+                            {% endif %}
+                        </td>
+                        <td>{{ user.role_display }}</td>
+                        <td>
+                            {% if user.is_super_admin %}
+                                Yes
+                            {% else %}
+                                No
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if not object_list.all %}
+            <div class="text-center empty-state">
+                - {% trans "No requests available" %} -
+            </div>
+        {% endif %}
+
+        {% include "app/includes/pagination.html" with paginator=page_obj %}
+
+    </div>
+{% endblock %}

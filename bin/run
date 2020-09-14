@@ -1,0 +1,9 @@
+#!/bin/bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
+ROOT_PATH="$DIR/.."
+
+COMMAND="$1"
+shift
+
+python3 "$ROOT_PATH/manage.py" runscript "$COMMAND" --script-args "$@"

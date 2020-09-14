@@ -1,0 +1,129 @@
+{% load i18n %}
+{% load static %}
+
+<div class="container">
+    <nav class="navbar navbar-expand-xl">
+        <a href="{% url 'dashboard' %}" class="arc-logo white-space-no-wrap">
+            <img src="{% static 'img/ARC.svg' %}" alt="ARC">
+            {% if config.env == 'uat' %}
+                <span class="uat-env-bagde badge badge-high">TEST</span>
+            {% endif %}
+        </a>
+        <button
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#arc-navbar"
+            aria-controls="arc-navbar"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="arc-navbar">
+            <ul class="navbar-nav mr-auto align-items-center">
+
+                <li class="nav-item {% if request.path == "/" %}active{% endif %}">
+                    <a class="nav-link text-uppercase" href="{% url 'dashboard' %}">{% trans "Dashboard" %}</a>
+                </li>
+                {% if request.user.is_authenticated %}
+
+                    {% if request.user.is_requester %}
+                        <li class="nav-item {% if '/requests' in request.path and mode == 'own' %}active{% endif %}">
+                            <a
+                                class="nav-link text-uppercase"
+                                href="{% url 'requests' %}?mode=own"
+                            >
+                                {% trans "My requests" %}
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    {% if request.user.is_validator %}
+                        <li class="nav-item {% if '/requests' in request.path and mode == 'submitted' %}active{% endif %}">
+                            <a
+                                class="nav-link"
+                                href="{% url 'requests' %}?mode=submitted"
+                            >
+                                {% trans "REQUESTS" %} <br/>
+                                {% trans "Submissions" %}
+                            </a>
+                        </li>
+                    {% endif %}
+
+                    <li class="nav-item {% if '/requests' in request.path and not mode %}active{% endif %}">
+                        <a
+                            class="nav-link"
+                            href="{% url 'requests' %}"
+                        >
+                            {% trans "REQUESTS" %}
+                            {% if request.user.is_validator or request.user.is_moderator %}
+                                <br/>
+                                {% trans "Matchmaking" %}
+                            {% endif %}
+                        </a>
+                    </li>
+
+                    <li class="nav-item {% if "/supplies" in request.path %}active{% endif %}">
+                        <a class="nav-link text-uppercase" href="{% url 'supplies' %}">
+                            {% if request.user.is_moderator or request.user.is_validator %}
+                                {% trans "Supplies" %}
+                            {% else %}
+                                {% trans "My supplies" %}
+                            {% endif %}
+                        </a>
+                    </li>
+
+                    {% if request.user.is_super_admin or request.user.is_validator %}
+                        <li class="nav-item {% if "/users" in request.path %}active{% endif %}">
+                            <a class="nav-link text-uppercase" href="{% url 'users' %}">{% trans "Users" %}</a>
+                        </li>
+                    {% endif %}
+
+                    {% if request.user.is_super_admin or request.user.is_moderator or request.user.is_validator %}
+                        <li class="nav-item">
+                            <a class="nav-link text-uppercase" href="{% url 'admin:resources_resource_changelist' %}"
+                            target="_blank">{% trans "Resources" %}</a>
+                        </li>
+                    {% endif %}
+                {% endif %}
+
+            </ul>
+
+            {% if request.user.is_authenticated %}
+                <ul class="navbar-nav mr-right">
+                    <li class="nav-item dropdown nav-item-right">
+                        <a
+                            class="nav-link dropdown-toggle link"
+                            id="dropdown01"
+                            href="#"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                        >
+                            {{ request.user.email }}
+                        </a>
+                        <div class="dropdown-menu dropdown-menu--user dropdown-menu-right" aria-labelledby="dropdown01">
+                            <a class="dropdown-item" href="{% url 'profile' %}">{% trans 'Profile' %}</a>
+
+                            {% if not request.user.is_switch_user %}
+                                <a class="dropdown-item"
+                                href="{% url 'change-password' %}">{% trans 'Change password' %}</a>
+                            {% endif %}
+                            <a class="dropdown-item" href="{% url 'logout' %}">{% trans 'Logout' %}</a>
+                        </div>
+                    </li>
+                </ul>
+            {% else %}
+                <a class="btn btn-primary text-uppercase small" href="{% url 'sso-login' %}">{% trans 'Switch Login' %}</a>
+                {% if config.allow_password_login %}
+                    <a class="nav-link link ml-2"
+                    href="{% url 'login' %}">{% trans 'Password login' %}</a>
+                {% endif %}
+            {% endif %}
+
+        </div>
+    </nav>
+</div>
+

@@ -1,0 +1,87 @@
+{% load i18n %}
+
+{% comment %}
+to call this modal import the template with request id and url,
+in the button which calls modal add attributes data-toggle="modal" data-target="#id"
+{% endcomment %}
+
+<div
+    class="modal fade toggle-request-sensitivity-modal"
+    id="{{ id }}"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="{{ id }}"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <form method="post" novalidate id="toggle_request_sensitivity" action="{{ url }}">
+                {% csrf_token %}
+
+                <div class="row">
+                    <div class="col col-md-11 mx-auto text-right modal-close">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-md-10 mx-auto">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{% trans 'Set request sensitivity'|upper %}</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col col-md-10 mx-auto">
+                        <div class="modal-body">
+                            <p>
+                                {% trans "The request will be marked as" %}
+                                {{ request.sensitive|yesno:'NOT sensitive,sensitive' }}.
+                            </p>
+
+                            <input
+                                type="hidden"
+                                name="sensitive"
+                                value="{{ request.sensitive|yesno:'False,True' }}"
+                            />
+
+                            {% if redirect_url %}
+                                <input
+                                    type="hidden"
+                                    name="redirect_url"
+                                    value="{{ redirect_url }}"
+                                />
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col col-md-10 mx-auto">
+                        <div class="modal-footer">
+                            <a
+                                class="btn btn-outline-primary text-uppercase small"
+                                href="#"
+                                data-dismiss="modal"
+                            >
+                                {% trans "Cancel" %}
+                            </a>
+                            <button
+                                class="btn btn-primary text-uppercase small"
+                                type="submit"
+                                name="submit"
+                                :disabled="!formValid"
+                            >
+                                {% trans "Confirm" %}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

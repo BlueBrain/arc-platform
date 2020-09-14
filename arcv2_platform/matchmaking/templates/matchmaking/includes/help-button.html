@@ -1,0 +1,8 @@
+{% load i18n %}
+
+{% if user.is_moderator or user.is_validator or user.is_requester %}
+<div class="mr-4 help-button" data-toggle="modal" data-target="#{{ id }}">
+    <i class="fas fa-question-circle help-icon"></i>
+    <span class="help-text">{% trans 'Help' %}</span>
+</div>
+{% endif %}

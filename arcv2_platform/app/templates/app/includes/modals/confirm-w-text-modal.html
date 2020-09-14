@@ -1,0 +1,78 @@
+{% load i18n %}
+
+{% comment %}
+to call this modal import the template with id, title, message and url ino
+in button calling modal add attributes data-toggle="modal" data-target="#id"
+{% endcomment %}
+
+<div
+    class="modal fade confirm-w-text"
+    id="{{ id }}"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="{{ id }}"
+    aria-hidden="true"
+>
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+
+            <form method="post" novalidate id="hold_attribution" action="{{ url }}">
+                {% csrf_token %}
+
+                <div class="row">
+                    <div class="col col-md-11 mx-auto text-right modal-close">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-md-10 mx-auto">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{% trans title|upper %}</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col col-md-10 mx-auto">
+                        <div class="modal-body">
+                            <p>{% trans message %}</p>
+                            <textarea
+                                id="confirm_message"
+                                class="form-control"
+                                name="confirm_message"
+                                cols="40"
+                                rows="4"
+                                maxlength="500"
+                                v-model="confirmMessage"
+                            ></textarea>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col col-md-10 mx-auto">
+                        <div class="modal-footer">
+                            <a
+                                class="btn btn-outline-primary text-uppercase small"
+                                href="#"
+                                data-dismiss="modal"
+                            >
+                                {% trans "Cancel" %}
+                            </a>
+                            <button
+                                class="btn btn-primary text-uppercase small"
+                                type="submit"
+                                name="submit"
+                                :disabled="!formValid"
+                            >
+                                {% trans "Confirm" %}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

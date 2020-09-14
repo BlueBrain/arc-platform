@@ -1,0 +1,88 @@
+{% extends 'layout.html' %}
+
+{% load static %}
+
+{% load i18n %}
+{% load queryparams %}
+
+{% block content %}
+    <div class="container">
+        <div class="arc-sticky">
+            <div class="row page-title page-title-margin">
+                <div class="col-12 col-sm-4">
+                    {% trans "Supplies" %}
+                </div>
+                <div class="col-12 col-sm-8 text-right">
+                    {% include 'matchmaking/includes/help-button.html' with id='helpModal' %}
+                    <a class="btn btn-outline-primary text-uppercase small"
+                       href="?{% queryparams download="1" %}"
+                    >
+                        {% trans "Export" %}
+                    </a>
+                    {% include "matchmaking/includes/button-create.html" with text=_("Add supply") base_url_name="supplies-create" %}
+                </div>
+            </div>
+        </div>
+
+        <form class="arc-table-filters" method="GET" action="{% url 'supplies' %}">
+            <div class="filter-bar row">
+                <div class="form-group col-6 col-xl-2">
+                    {% include "app/includes/table-filter.html" with filter=filters.type %}
+                </div>
+                <div class="form-group col-6 col-xl-2">
+                    {% include "app/includes/table-filter.html" with filter=filters.resource_type %}
+                </div>
+                <div class="form-group col-6 col-xl-2">
+                    {% include "app/includes/table-filter.html" with filter=filters.status %}
+                </div>
+            </div>
+        </form>
+
+        <div class="arc-table-container">
+            <table class="table table-borderless arc-table">
+                <thead class="thead-dark">
+                <tr>
+                    <th scope="col">{% trans "ID" %}</th>
+                    <th scope="col" class="col--creation_time">{% trans "Creation date" %}</th>
+                    <th scope="col">{% trans "Type" %}</th>
+                    <th scope="col">{% trans "Supply" %}</th>
+                    <th scope="col" class="text-right">{% trans "Quantity" %}</th>
+                    <th scope="col">{% trans "Status" %}</th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% for supply in object_list %}
+                    <tr class="clickable" data-href="{% url 'supplies-detail' pk=supply.id %}">
+                        <td><a href="{% url 'supplies-detail' pk=supply.id %}" class="link">{{ supply.id }}</a>
+                        <td>{{ supply.creation_time | date:"d/m/Y H:i" }}</td>
+                        <td>{{ supply.resource.name }}</td>
+                        <td>{{ supply.full_category_item }}</td>
+                        <td class="text-right">{{ supply.quantity }}</td>
+                        <td>
+                            <span class="supply-status supply-status-{{ supply.status }}">{{ supply.get_status_display }}</span>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        {% if not object_list.all %}
+            <div class="text-center empty-state">
+                - {% trans "No supplies available" %} -
+            </div>
+        {% endif %}
+
+
+        {% include "app/includes/pagination.html" with paginator=page_obj %}
+
+
+    </div>
+
+    {% include 'matchmaking/includes/help-modal.html' with id='helpModal' %}
+{% endblock %}
+
+{% block script %}
+    <script src="{% static 'src/js/clickable-rows.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,25 @@
+
+{% load i18n %}
+
+{% with match_id=match.id|stringformat:"s" %}
+    {% with "complete-modal-"|add:match_id|add:"-match" as id_modal %}
+        <span data-toggle="modal" data-target="#{{ id_modal }}">
+            <button
+                class="btn btn-info"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Complete match"
+            >
+                <i class="fas fa-people-carry"></i>
+            </button>
+        </span>
+
+        <div class="text-left white-space-normal">
+            {% comment %} Complete match modal {% endcomment %}
+            {% trans "Complete attribution" as title %}
+            {% trans "The attribution will be set to completed." as message %}
+            {% url "request-complete-attribution" pk=request.id match_id=match.id as url_link %}
+            {% include "app/includes/modals/simple-modal.html" with id=id_modal title=title message=message url=url_link %}
+        </div>
+    {% endwith %}
+{% endwith %}

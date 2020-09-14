@@ -1,0 +1,9 @@
+
+FROM node:12
+WORKDIR /code
+COPY package.json .
+COPY package-lock.json .
+COPY arcv2_platform/static/src arcv2_platform/static/src
+RUN npm i
+
+CMD npm run watch

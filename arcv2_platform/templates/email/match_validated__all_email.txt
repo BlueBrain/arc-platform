@@ -1,0 +1,14 @@
+Dear requester,
+
+The following item(s) that you have requested has/have been found and are available (the link is accessible only for the requester and admin users): {{ deployment_base_url }}/requests/{{ match.request.id }}.
+Corresponding supply (the link is accessible only for the supplier and admin users): {{ deployment_base_url }}/supplies/{{ match.supply.id }}.
+
+May we ask you to get into direct contact with the supplier (addressed as well by this e-mail) to settle the specific shipment procedure for the above listed item(s).
+
+Please react at your earliest convenience but no later than one week after this e-mail has been generated. Otherwise the above listed item(s) will be released for reassignment.
+
+Once you received the shipment of the above listed item(s), please confirm the successful completion of this transaction by replying to this e-mail stating "successful completion of transaction".
+
+
+Regards,
+the ARC platform

@@ -1,0 +1,25 @@
+<p>Dear validator,</p>
+
+<p>
+    The following requests have not been updated for 2 weeks: <br/>
+    <ul>
+        {% for request in requests %}
+            <li>
+                <a href="{{ deployment_base_url }}/requests/{{ request.id }}">{{ request }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+</p>
+
+
+<p>
+    Please open each request URLs in a browser and click on the 'keep' button if you wish to keep the request for 2 more weeks. <br/>
+    Without any action from your side, the requests will be archived automatically in 3 days.
+</p>
+
+<br/>
+
+<p>
+    Regards, <br/>
+    the ARC platform
+</p>

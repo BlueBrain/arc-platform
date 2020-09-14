@@ -1,0 +1,85 @@
+{% load static %}
+
+<html>
+
+    <head>
+        <meta charset="utf-8">
+        <title>ArcV2</title>
+        <link rel="stylesheet" href="{% static "assets/index.css" %}">
+        <link rel="stylesheet" href="{% static "assets/fontawesome.css" %}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{% static "favicon/apple-touch-icon.png" %}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{% static "favicon/favicon-32x32.png" %}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{% static "favicon/favicon-16x16.png" %}">
+        <link rel="manifest" href="{% static "favicon/site.webmanifest" %}">
+        <meta name="msapplication-TileColor" content="#3564C2">
+        <meta name="theme-color" content="#3564C2">
+    </head>
+
+    <body>
+    <div
+        id="vue-app"
+        class="bg-light pb-5 {% if config.env == 'uat' %} uat-env-bg {% endif %}"
+        style="min-height: 100%;"
+    >
+        <nav class="navbar navbar-expand-lg navbar-light">
+
+            {% include "app/includes/messages.html" %}
+                {% include "header.html" %}
+
+            </nav>
+
+            <div class="content">
+                {% block content %}
+                {% endblock %}
+
+                <div class="container mt-4">
+                    <ul class="footer-help-block">
+                        <!-- <li>Questions on requests/supplies? <a href="mailto:info_covid_academicresources@arc">info_covid_academicresources@arc</a></li>
+                        <li>Technical support: <a href="mailto:techsupport@arc">techsupport@arc</a></li>
+                        {% if user.is_moderator or user.is_validator %}
+                            <li>
+                                <a
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    href=""
+                                >
+                                    Standard operating procedure for attribution
+                                </a>
+                            </li>
+                            <li>
+                                <a
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    href=""
+                                >
+                                    Standard operating procedure for validation
+                                </a>
+                            </li>
+                        {% endif %}
+                        {% if user.is_validator %}
+                            <li>
+                                <a
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    href=""
+                                >
+                                    Standard operating procedure to add a user
+                                </a>
+                            </li>
+                        {% endif %} -->
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+
+        <script src="{% static "assets/index.js" %}"></script>
+        {% block script %}
+            <script>
+                arc.page.default()
+            </script>
+        {% endblock %}
+
+    </body>
+
+</html>

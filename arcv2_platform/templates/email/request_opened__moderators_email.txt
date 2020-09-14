@@ -1,0 +1,7 @@
+Dear moderator,
+
+A new request has been open in the platform: {{ deployment_base_url }}/requests/{{ request.id }}
+
+
+Regards,
+the ARC platform

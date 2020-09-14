@@ -1,0 +1,25 @@
+
+{% load i18n %}
+
+{% with match_id=match.id|stringformat:"s" %}
+    {% with "reject-attribution-modal-"|add:match_id|add:"-match" as id_modal %}
+        <span data-toggle="modal" data-target="#{{ id_modal }}">
+            <button
+                class="btn btn-danger"
+                data-toggle="tooltip"
+                data-placement="top"
+                title="Reject match"
+            >
+                <i class="fas fa-times"></i>
+            </button>
+        </span>
+
+        <div class="text-left white-space-normal">
+            {% comment %} Reject attribution modal {% endcomment %}
+            {% trans "Reject supply attribution" as title %}
+            {% trans "The selected supply will be withdrawn from the request and available for other requests, match will be flagged as rejected with following reason:" as message %}
+            {% url "request-reject-attribution" pk=request.id match_id=match.id as url %}
+            {% include "app/includes/modals/confirm-w-text-modal.html" with id=id_modal title=title message=message url=url %}
+        </div>
+    {% endwith %}
+{% endwith %}

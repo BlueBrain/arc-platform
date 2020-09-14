@@ -1,0 +1,261 @@
+@import url('https://fonts.googleapis.com/css?family=Archivo:400,400i,500,500i,600,600i,700,700i&display=swap');
+
+
+@import './variables';
+@import '~bootstrap/scss/bootstrap-reboot.scss';
+@import '~bootstrap/scss/bootstrap.scss';
+@import '~bootstrap/scss/bootstrap-grid.scss';
+
+@import 'includes/navbar';
+@import 'includes/badges';
+@import 'includes/tiles';
+@import 'includes/forms';
+@import 'includes/dropdowns';
+@import 'includes/arc-toasts';
+@import 'includes/arc-tables';
+@import 'includes/accordion';
+@import 'includes/request-details';
+@import 'includes/modal';
+@import 'includes/help';
+@import 'includes/home';
+@import 'includes/filter';
+
+
+.arc-logo {
+    margin-right: 80px;
+
+    img {
+        height: 30px;
+    }
+
+    .uat-env-bagde {
+        display: inline-block;
+        margin-left: 12px;
+    }
+}
+
+.navbar a.navbar-brand {
+    color: $primary !important;
+
+    font-size: 32px;
+    font-style: italic;
+    letter-spacing: 1.5px;
+    font-weight: 500;
+
+    span.version {
+        font-weight: 400 !important;
+        font-size: 22px;
+    }
+}
+
+.navbar-collapse {
+    background-color: white;
+    z-index: 1030;
+
+    &.show {
+        .dropdown-menu--user {
+            margin-top: 0;
+        }
+    }
+}
+
+
+.link {
+    color: $primary !important;
+    font-weight: 600 !important;
+
+    text-decoration: underline !important;
+
+    &:hover {
+        text-decoration: none !important;
+    }
+}
+
+
+.btn {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+    line-height: 28px;
+    text-transform: uppercase;
+
+    &.btn-primary {
+        color: #FFFFFF;
+    }
+
+    &.btn-outline-primary {
+        background: white;
+        &:hover {
+            color: $primary;
+            background: #EAEAEA;
+        }
+    }
+
+    &.btn-match-count {
+        max-height: 28px;
+        min-width: 40px;
+        padding: 0 !important;
+    }
+
+    &.btn-match-count-disable {
+        background-color: $gray-disable;
+        color: #CCCCCC
+    }
+
+}
+
+select:focus,
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus {
+    outline: none !important;
+    box-shadow: none !important;
+}
+
+.icon-sensitive {
+    color: #66696F;
+}
+
+.page-title-back {
+    @extend .link;
+    font-size: 12px;
+}
+
+.page-title-margin {
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+.page-title {
+    color: $dark-blue;
+    font-size: 20px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+}
+
+.request-form-sensivity {
+    padding-top: 12px;
+}
+
+.request-status {
+    font-weight: bold;
+    text-transform: capitalize;
+    color: $gray-500;
+
+    &.request-status-open {
+        color: $green;
+    }
+}
+
+.request-expiring {
+    display: inline-block;
+    margin-top: 4px;
+    font-weight: bold;
+    text-transform: capitalize;
+    color: $orange;
+}
+
+.supply-status {
+    font-weight: bold;
+    color: $gray-500;
+    white-space: nowrap;
+
+    &.supply-status-available {
+        color: $green;
+    }
+
+    &.supply-status-on-hold {
+        color: $orange;
+    }
+
+    &.supply-status-rejected {
+        color: $red;
+    }
+
+    &.supply-status-ongoing_attribution {
+        color: $orange;
+    }
+
+    &.supply-status-attributed {
+        color: $primary;
+    }
+
+    &.supply-status-archived {
+        color: $gray-500;
+    }
+
+    &.supply-status-completed {
+        color: $light-blue;
+    }
+}
+
+.supply-status-reason {
+    display: inline-block;
+    margin-top: 4px;
+}
+
+.empty-state {
+    color: $gray-500;
+    font-weight: 500;
+    letter-spacing: 0.5px;
+}
+
+.dashboard-arcv2 {
+    text-align: center;
+    text-transform: uppercase;
+    @extend .text-primary;
+    line-height: 40px;
+    margin-top: 24px;
+}
+
+.arc-sticky {
+    @extend .sticky-top;
+    @extend .bg-light;
+    border: 1px solid transparent;
+}
+
+.uat-env-bg.bg-light, .uat-env-bg .arc-sticky {
+    background-color: #fef5e6 !important;
+}
+
+.tos-container {
+    padding: 50px;
+    background: #FFFFFF;
+    height: 500px;
+    overflow-y: scroll;
+}
+
+.footer-help-block {
+    @extend .list-unstyled;
+
+    color: $dark-blue !important;
+    margin-top: 12px;
+    font-size: 12px;
+
+    line-height: 18px;
+}
+
+.td--fit-content {
+    width: 1%;
+    white-space: nowrap;
+}
+
+.white-space-normal {
+    white-space: normal;
+}
+
+.row--no-click {
+    cursor: auto;
+}
+
+.white-space-no-wrap {
+    white-space: nowrap;
+}
+
+.navbar .nav-item {
+    text-align: center;
+}
+
+.navbar-nav .nav-item {
+    max-height: 70px;
+}

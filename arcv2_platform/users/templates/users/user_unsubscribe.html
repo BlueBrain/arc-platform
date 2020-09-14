@@ -1,0 +1,40 @@
+{% extends 'layout.html' %}
+
+{% load i18n %}
+
+{% block content %}
+    <div class="container">
+
+        <div class="row page-title-margin">
+            <div class="col">
+                <a class="page-title-back" href="{% url 'dashboard' %}">
+                    < {% trans "Back to Dashboard" %}
+                </a>
+                <div class="page-title">
+                    {% trans 'Unsubscribe from notifications' %}
+                </div>
+            </div>
+        </div>
+
+        <div class="form-block-wrapper">
+            <div class="form-block">
+
+                <div class="row" >
+                    <div class="col col-1"></div>
+                    <div class="col col-md-11 header-accordion">
+                        {% trans 'Successfully unsubscribed from notifications' %}
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col col-1"></div>
+
+                    <div class="col col-md-11">
+                        {% trans 'To subscribe again to notifications, please enable notifications from your profile.' %}
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}

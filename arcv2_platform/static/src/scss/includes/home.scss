@@ -1,0 +1,126 @@
+$text-width: 625px;
+$text-left: 650px;
+$logo-height: 25px;
+$title-color: #3564C2;
+
+.home-body {
+    background-color: #f5f7fa;
+}
+
+.home-nav {
+    background-color: #FFFFFF;
+    height: 80px;
+}
+
+.login-buttons {
+    float: right;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    height: 100%;
+    margin-right: 100px;
+}
+
+.arc-logo-home {
+    height: 30px;
+    margin-top: 25px;
+    margin-left: 100px;
+}
+
+.home-content {
+    width: 1400px;
+    margin: 0 auto;
+}
+
+.bg-holder {
+    position: relative;
+    width: 100%;
+}
+
+.home-bg {
+    width: 100%;
+}
+
+.home-title {
+    font-family: SuisseIntlSemiBold, sans-serif;
+    font-size: 40px;
+    position: absolute;
+    top: 220px;
+    left: $text-left;
+    color: #FFFFFF;
+    width: 660px;
+}
+
+.home-text {
+    font-family: SuisseIntlRegular, sans-serif;
+    font-size: 22px;
+    line-height: 27px;
+    position: absolute;
+    top: 370px;
+    left: $text-left;
+    color: #FFFFFF;
+    width: $text-width;
+}
+
+.home-separator {
+    background-color: #00D4FE;
+    height: 2px;
+    width: $text-width;
+    top: 550px;
+    left: $text-left;
+    position: absolute;
+}
+
+.home-subtitle {
+    font-family: SuisseIntlSemiBold, sans-serif;
+    font-size: 28px;
+    line-height: 33px;
+    position: absolute;
+    top: 580px;
+    left: $text-left;
+    color: #FFFFFF;
+    width: $text-width;
+}
+
+.home-explanations {
+    padding: 60px 100px 60px 100px;
+    background-color: #f5f7fa;
+}
+
+.home-explanation-title {
+    font-family: SuisseIntlSemiBold, sans-serif;
+    font-size: 28px;
+    color: $title-color;
+}
+
+.home-explanation-text {
+    font-family: SuisseIntlBook, sans-serif;
+    font-size: 16px;
+    line-height: 21px;
+    padding-right: 50px;
+    color: #404040;
+}
+
+.home-footer {
+    background-color: #FFFFFF;
+    padding: 40px 100px 40px 100px;
+}
+
+.apptitext {
+    font-family: SuisseIntlRegular, sans-serif;
+    font-size: 18px;
+    color: #404040;
+    float: right;
+}
+
+.apptitext > a {
+    text-decoration: underline;
+    color: #404040;
+}
+
+.footer-link {
+    font-family: SuisseIntlSemiBold, sans-serif;
+    font-size: 14px;
+    font-weight: bold;
+    color: $title-color;
+}

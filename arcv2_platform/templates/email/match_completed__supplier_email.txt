@@ -1,0 +1,8 @@
+Dear supplier,
+
+An attribution for the following match has been marked as completed: {{ deployment_base_url }}/supplies/{{ match.supply.id }}.
+May we ask you to check and close the supply if it's not available anymore, otherwise it will be open for new attributions.
+
+
+Regards, <br/>
+the ARC platform

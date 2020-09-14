@@ -1,0 +1,35 @@
+
+.badge-critical,
+.badge-high,
+.badge-medium,
+.badge-light,
+.badge-low{
+    font-size: 12px;
+    font-weight: 500;
+
+    line-height: 16px !important;
+    padding-top: 0px;
+    padding-bottom: 0px;
+    text-transform: capitalize;
+}
+
+
+.badge-critical {
+    @include badge-variant($red);
+    color: white;
+}
+
+.badge-high {
+    @include badge-variant($orange);
+    color: white;
+}
+
+.badge-medium {
+    @include badge-variant($green);
+    color: white;
+}
+
+.badge-low {
+    @include badge-variant($gray-500); // #9D9DAA
+    color: white;
+}

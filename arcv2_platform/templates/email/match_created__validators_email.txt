@@ -1,0 +1,8 @@
+Dear validator,
+
+A new match for {{ request.resource.name }} {{ request.category_item }} for {{ request.email }} has been created by a moderator.
+You can access the request here: {{ deployment_base_url }}/requests/{{ request.id }}
+
+
+Regards,
+the ARC platform

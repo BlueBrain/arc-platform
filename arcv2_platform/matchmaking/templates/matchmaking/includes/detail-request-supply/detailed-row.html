@@ -1,0 +1,34 @@
+{% load i18n %}
+
+<tr class="collapse" id="log-block-{{ item.id }}">
+    <td colspan={{ colspan }} class="details-supply">
+        <div class="details-supply-info">
+            <div class="row details-supply-info-row">
+                <div class="col">
+                    <p class="details-info-label">{% trans "Full name (Role)" %}</p>
+                    <p>{{ item.fullname }}</p>
+                </div>
+                <div class="col">
+                    <p class="details-info-label">{% trans "Email address" %}</p>
+                    <p>{{ item.email }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <p class="details-info-label">{% trans "Affiliation" %}</p>
+                    <p>{{ item.affiliation }}</p>
+                </div>
+                <div class="col">
+                    <p class="details-info-label">{% trans "Phone" %}</p>
+                    <p>{{ item.phone }}</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <p class="details-info-label">{% trans "Brief comment" %}</p>
+                    <p>{{ item.author_comment }}</p>
+                </div>
+            </div>
+        </div>
+    </td>
+</tr>

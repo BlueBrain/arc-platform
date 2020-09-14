@@ -1,0 +1,344 @@
+{% extends 'layout.html' %}
+
+{% load i18n %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="arc-sticky">
+
+            <div class="row page-title-margin">
+                <div class="col">
+                    <a class="page-title-back" href="{% url 'requests' %}{% if mode %}?mode={{ mode }}{% endif %}">
+                        < {% trans "Back to Requests" %}
+                    </a>
+                    <div class="page-title">
+                        {% blocktrans with resource_type=object.resource id=object.id %}
+                            {{ resource_type }} request {{ id }}
+                        {% endblocktrans %}
+                        {% if object.is_expiring %}
+                            <span class="badge badge-high">Expiring</span>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="col text-right">
+                    {% if object.can_be_edited %}
+                        <a
+                            class="btn btn-primary"
+                            href="{% url 'requests-edit' object.id %}"
+                        >
+                            {% trans "Edit" %}
+                        </a>
+                    {% endif %}
+
+                    {% if object.can_be_archived %}
+                        <button
+                            class="btn btn-outline-primary"
+                            data-toggle="modal"
+                            data-target="#archive-modal"
+                        >
+                            {% trans "Archive" %}
+                        </button>
+                    {% endif %}
+
+                    {% if object.can_be_closed %}
+                        <button
+                            class="btn btn-primary"
+                            data-toggle="modal"
+                            data-target="#close-modal"
+                        >
+                            {% trans "Close request" %}
+                        </button>
+                    {% endif %}
+
+                    {% if user.is_privileged and object.can_be_reopened %}
+                        <a
+                            class="btn btn-outline-primary"
+                            href="{% url 'request-resurrect' object.id %}"
+                        >
+                            {% trans "Re-open" %}
+                        </a>
+                    {% endif %}
+
+                    {% if user.is_validator and object.can_be_validated %}
+                        <button
+                            class="btn btn-outline-primary"
+                            data-toggle="modal"
+                            data-target="#validate-modal"
+                        >
+                            {% trans "Validate" %}
+                        </button>
+                    {% endif %}
+
+                    {% if user.is_validator and object.can_be_rejected %}
+                        <button
+                            class="btn btn-danger"
+                            data-toggle="modal"
+                            data-target="#reject-modal"
+                        >
+                            {% trans "Reject" %}
+                        </button>
+                    {% endif %}
+
+                    {% if object.is_expiring %}
+                        <button
+                            class="btn btn-primary"
+                            data-toggle="modal"
+                            data-target="#unexpire-modal"
+                        >
+                            {% trans "Keep" %}
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="main-info-status request-status-background {% if object.is_open %} request-status-background-open {% endif %}">
+            <div>
+                {{ object.status|upper }}
+            </div>
+        </div>
+
+        {% trans "Add request" as button_text %}
+        {% include 'matchmaking/includes/detail-request-supply/main-info.html' with requestedOrAvailable="requested" button_text=button_text base_url_name="requests-create" object_type='request' %}
+        <!-- TODO: remove button_text if Add button isn't needed -->
+
+        {% include 'matchmaking/includes/detail-request-supply/additional-info.html' with item=object %}
+
+        {% if not object.is_archived %}
+
+            <div class="row page-title-margin">
+                <div class="col">
+                    <div class="page-title">
+                        Attributed supplies ({{ attributed_matches|length }})
+                    </div>
+                </div>
+            </div>
+
+            {% if attributed_matches|length == 0 %}
+
+                <p class="no-available-supply">{% trans "There is no attributed supply for this request yet." %}</p>
+
+            {% else %}
+
+                <table class="table table-borderless arc-table">
+                    <tbody>
+
+                    {% for match in attributed_matches %}
+                        <tr>
+                            <td>
+                                <a data-toggle="collapse" href="#log-block-{{ match.supply.id }}" role="button"
+                                   aria-expanded="false">
+                                    <i class="fas fa-chevron-right chevron-right"></i>
+                                    <i class="fas fa-chevron-down chevron-down"></i>
+                                </a>
+                            </td>
+                            <td><a href="{% url 'supplies-detail' pk=match.supply.id %}"
+                                   class="link">{{ match.supply.id }}</a></td>
+                            <td>{{ match.supply.creation_time | date:"d/m/Y H:i" }}</td>
+                            <td>{{ match.supply.resource.name }}</td>
+                            <td>{{ match.supply.category.name }} {{ match.supply.item.name }}</td>
+                            <td class="text-right">
+                                {% if object.is_closed or match.is_attributed %}
+                                    {{ match.supply.remaining_quantity }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if match.is_validated %}
+                                    {# We need to display supply status according to match status as the supply may #}
+                                    {# become available again #}
+                                    <span class="supply-status supply-status-attributed">
+                                        {% trans "Validated" %}
+                                        ({{ match.quantity }})
+                                    </span>
+                                {% elif match.is_attributed %}
+                                    <span class="supply-status supply-status-ongoing_attribution">
+                                        {% trans "Attributed but not validated" %}
+                                        ({{ match.quantity }})
+                                    </span>
+                                {% elif match.is_on_hold %}
+                                    <span>
+                                        <span class="supply-status supply-status-on-hold">
+                                            {% trans "Attributed but on hold" %}
+                                            ({{ match.quantity }})
+                                        </span>
+                                        <br/>
+                                        <span class="supply-status-reason">Reason: {{ match.status_reason }}</span>
+                                    </span>
+                                {% elif match.is_rejected %}
+                                    <span>
+                                        <span class="supply-status supply-status-rejected">
+                                            {% trans "Attributed and rejected" %}
+                                            ({{ match.quantity }})
+                                        </span>
+                                        <br/>
+                                        <span class="supply-status-reason">Reason: {{ match.status_reason }}</span>
+                                    </span>
+                                {% elif match.is_completed %}
+                                    <span>
+                                        <span class="supply-status supply-status-completed">
+                                            {% trans "Completed" %}
+                                            ({{ match.quantity }})
+                                        </span>
+                                    </span>
+                                {% else %}
+                                    <span class="supply-status supply-status-{{ match.supply.status }}">
+                                        {{ match.supply.get_status_display }}
+                                    </span>
+                                {% endif %}
+                            </td>
+                            {% with match_id=match.id|stringformat:"s" %}
+                                {% if user.is_validator %}
+                                    <td class="text-center td--fit-content">
+                                        {% if not object.is_closed %}
+                                            {% if match.is_attributed or match.is_on_hold or match.is_rejected %}
+                                                {% comment %} Validate match button {% endcomment %}
+                                                {% include "matchmaking/includes/validate-match-button.html" with request=object match=match %}
+                                            {% elif match.is_validated %}
+                                                {% comment %} Complete match button {% endcomment %}
+                                                {% include "matchmaking/includes/complete-match-button.html" with request=object match=match %}
+                                            {% endif %}
+                                        {% endif %}
+                                    </td>
+                                {% elif user.is_requester %}
+                                    <td class="text-center td--fit-content">
+                                        {% if match.is_validated %}
+                                            {% comment %} Complete match button {% endcomment %}
+                                            {% include "matchmaking/includes/complete-match-button.html" with request=object match=match %}
+                                        {% endif %}
+                                    </td>
+                                {% endif %}
+                                <td class="text-center td--fit-content">
+                                    {% if not object.is_closed and user.is_validator %}
+                                        {% if match.is_attributed or match.is_validated or match.is_on_hold %}
+                                            {% comment %} Reject match button {% endcomment %}
+                                            {% include "matchmaking/includes/reject-match-button.html" with request=object match=match %}
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                                <td class="text-center td--fit-content">
+                                    {% if not object.is_closed and user.is_validator %}
+                                        {% if  match.is_attributed %}
+                                            {% comment %} Hold match button {% endcomment %}
+                                            {% include "matchmaking/includes/hold-match-button.html" with request=object match=match %}
+                                        {% endif %}
+                                    {% endif %}
+                                </td>
+                            {% endwith %}
+                        </tr>
+                        {% include 'matchmaking/includes/detail-request-supply/detailed-row.html' with item=match.supply colspan=9 %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            {% endif %}
+
+        {% endif %}
+
+        {% if object.is_open and is_admin_access %}
+
+            <div class="row page-title-margin">
+                <div class="col">
+                    <div class="page-title">
+                        Available supplies ({{ available_supplies.count }})
+                    </div>
+                </div>
+            </div>
+
+            {% if available_supplies.count == 0 %}
+
+                <p class="no-available-supply">{% trans "There is no available supply for this request yet." %}</p>
+
+            {% else %}
+
+                <table class="table table-borderless arc-table">
+                    <tbody>
+
+                    {% for supply in available_supplies %}
+                        <tr>
+                            <td>
+                                <a data-toggle="collapse" href="#log-block-{{ supply.id }}" role="button"
+                                   aria-expanded="false">
+                                    <i class="fas fa-chevron-right chevron-right"></i>
+                                    <i class="fas fa-chevron-down chevron-down"></i>
+                                </a>
+                            </td>
+                            <td><a href="{% url 'supplies-detail' pk=supply.id %}" class="link">{{ supply.id }}</a></td>
+                            <td>{{ supply.creation_time | date:"d/m/Y H:i" }}</td>
+                            <td>{{ supply.resource.name }}</td>
+                            <td>{{ supply.category.name }} {{ supply.item.name }}</td>
+                            <td class="text-right">{{ supply.remaining_quantity }}</td>
+                            <td>
+                                <span class="supply-status supply-status-{{ supply.status }}">{{ supply.get_status_display }}</span>
+                            </td>
+                            <td>
+                                {% with supply_id=supply.id|stringformat:"s" %}
+                                    {% with "attribute-supply-modal-"|add:supply_id|add:"-supply" as id_modal %}
+                                        <button class="btn btn-primary" data-toggle="modal"
+                                                data-target="#{{ id_modal }}">
+                                            Attribute
+                                        </button>
+                                        <div>
+                                            {% comment %} Attribute supply modal {% endcomment %}
+                                            {% trans "Attribute supply" as title %}
+                                            {% trans "The supply will be set to Ongoing attribution and no longer available for other requests while it is in validation." as message %}
+                                            {% url "request-supply-attribute" pk=object.id supply_id=supply.id as url_link %}
+                                            {% include "app/includes/modals/simple-modal.html" with id=id_modal title=title message=message url=url_link %}
+                                        </div>
+                                    {% endwith %}                                {% endwith %}
+
+                            </td>
+                        </tr>
+                        {% include 'matchmaking/includes/detail-request-supply/detailed-row.html' with item=supply colspan=8 %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            {% endif %}
+        {% endif %}
+
+    </div>
+
+    {% trans "Close request" as title %}
+    {% trans "The request will be closed and will no longer be editable" as message %}
+    {% url "request-close" object.id as url %}
+    {% include 'app/includes/modals/simple-modal.html' with id='close-modal' title=title message=message url=url %}
+
+    {% trans "Archive supply" as title %}
+    {% trans "It will no longer be possible to edit the request nor to find attributions." as message %}
+    {% url "request-archive" object.id as url %}
+    {% include 'app/includes/modals/simple-modal.html' with id='archive-modal' title=title message=message url=url %}
+
+    {% trans "Keep request" as title %}
+    {% trans "The request will be kept for two more weeks unless matched." as message %}
+    {% url "request-unexpire" object.id as url %}
+    {% include 'app/includes/modals/simple-modal.html' with id='unexpire-modal' title=title message=message url=url %}
+
+    {% comment %} Validate request modal {% endcomment %}
+    {% trans "Validate request" as title %}
+    {% trans "The request will be set to Open and available for attribution." as message %}
+    {% url "request-validate" pk=object.id as url_link %}
+    {% include "app/includes/modals/simple-modal.html" with id='validate-modal' title=title message=message url=url_link %}
+
+    {% comment %} Reject request modal {% endcomment %}
+    {% url "request-reject" pk=object.id as url_link %}
+    {% include "app/includes/modals/reject-request-modal.html" with id='reject-modal' url=url_link %}
+{% endblock %}
+
+{% block script %}
+    <script>
+        document.querySelectorAll('.validate-attribution').forEach(node => {
+            arc.page.validate_attribution_form(node, {
+                attributed: node.querySelector('#id_attributed').value,
+                remaining: node.querySelector('#id_remaining').value,
+                available: node.querySelector('#id_available').value,
+                requestQuantity: node.querySelector('#id_requestQuantity').value
+            })
+        });
+
+        document.querySelectorAll('.confirm-w-text').forEach(node => {
+            arc.page.confirm_w_text_form(node);
+        });
+    </script>
+{% endblock %}

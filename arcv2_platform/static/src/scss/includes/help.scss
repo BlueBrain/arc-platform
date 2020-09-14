@@ -1,0 +1,64 @@
+.help-button {
+    display: inline-block;
+    cursor: pointer;
+}
+
+.help-text {
+    font-size: 12px;
+    text-transform: none;
+    text-decoration: underline;
+    color: $primary;
+    font-family: "Archivo", sans-serif;
+    font-weight: bold;
+    vertical-align: middle;
+    line-height: 20px;
+}
+
+.help-icon {
+    color: $primary;
+    width: 20px;
+    height: 20px;
+}
+
+.help-modal-dialog {
+    width: 830px;
+}
+
+.help-modal-content {
+    background-color: #f0f2f5;
+}
+
+.help-modal-title {
+    color: #02163E;
+    font-family: "Archivo", sans-serif;
+    font-size: 22px;
+    margin-left: 85px;
+    text-transform: uppercase;
+    display: block;
+}
+
+.help-modal-section {
+    background-color: #FFFFFF;
+    padding: 30px 85px 62px;
+    margin-left: 85px;
+    margin-right: 85px;
+}
+
+.help-modal-section-title {
+    text-transform: uppercase;
+    color: $primary;
+    font-family: "Archivo", sans-serif;
+    font-weight: bold;
+    font-size: 12px;
+    display: block;
+}
+
+.help-modal-item {
+    margin-top: 30px;
+}
+
+.help-modal-text {
+    font-family: "Archivo", sans-serif;
+    font-size: 14px;
+    color: #02163E;
+}

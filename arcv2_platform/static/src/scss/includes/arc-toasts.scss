@@ -1,0 +1,51 @@
+
+.arc-toast-wrapper {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 400px;
+    z-index: 999;
+}
+
+
+.arc-toast {
+    @extend .d-flex;
+    margin-bottom: 10px;
+    width: 300px;
+    box-sizing: border-box;
+    border-radius: 4px;
+    color: $dark-blue;
+    border: 1px solid $gray-600;
+    background-color: $gray-100;
+
+
+    line-height: 18px;
+    padding: 15px 20px;
+
+
+    .arc-toast__cross {
+        @extend .ml-2;
+        @extend .mb-1;
+        @extend .close;
+        @extend .align-self-start;
+
+        line-height: 15px;
+    }
+
+}
+
+
+.arc-toast-success {
+    border: 1px solid $green;
+    background-color: $light-green;
+}
+
+.arc-toast-error {
+    border: 1px solid $red;
+    background-color: $light-red;
+}
+
+.arc-toast-warning {
+    border: 1px solid $orange;
+    background-color: $light-orange;
+}

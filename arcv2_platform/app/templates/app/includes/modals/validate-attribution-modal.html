@@ -1,0 +1,87 @@
+{% load i18n %}
+{% load widget_tweaks %}
+
+
+{% comment %}
+To call this modal import the template in the page specifying the ID and the form
+
+The form is generated like this
+===
+form = ValidateAttributionForm()
+===
+
+On the button that will trigger the modal, please add attributes
+===
+data-toggle="modal" data-target="#<id>"
+===
+
+Please add the following content on the page where this modal is called
+===
+{% block script %}
+
+    {{ form.available.value |json_script:"data-inject-available" }}
+    {{ form.attributed.value |json_script:"data-inject-attributed" }}
+    {{ form.remaining.value |json_script:"data-inject-remaining" }}
+
+    <script>
+        const data = arc.utils.load_json_script();
+
+        const modalNode = document.querySelector('.validate-attribution');
+
+        arc.page.validate_attribution_form(modalNode, {
+            available: data.available,
+            attributed: data.attributed,
+            remaining: data.remaining,
+        })
+    </script>
+{% endblock %}
+===
+{% endcomment %}
+
+{% block content %}
+    <div class="modal fade validate-attribution" id="{{ id }}" tabindex="-1" role="dialog" aria-labelledby="{{ id }}" aria-hidden="true">
+
+
+        <div class="modal-dialog modal-dialog-centered modal-attribution-content" role="document">
+            <div class="modal-content ">
+                <div class="row">
+                    <div class="col col-md-11 mx-auto text-right modal-close">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-md-10 mx-auto">
+                        <div class="modal-header">
+                            <h5 class="modal-title">{% trans "Validate attribution"|upper %}</h5>
+                        </div>
+                    </div>
+                </div>
+
+                <form method="post" novalidate id="validate_attribution" action="{{ url }}">
+                    {% csrf_token %}
+                    <div class="row">
+                        <div class="col col-md-10 mx-auto">
+                            <div class="modal-body validate-attribution-modal-body">
+                                {% include "matchmaking/supply_attribution_form.html" with supply=supply form=form request=request %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col col-md-10 mx-auto">
+                            <div class="modal-footer">
+                                <a class="btn btn-outline-primary text-uppercase small" href="#" data-dismiss="modal">{% trans "Cancel" %}</a>
+                                <button class="btn btn-primary text-uppercase small" type="submit" name="submit" v-bind:disabled="cannotSave">{% trans "Confirm" %}</button>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+

@@ -1,0 +1,94 @@
+{% extends 'layout.html' %}
+
+{% load i18n %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+    <div class="container">
+
+        <form method="post">
+
+            {% comment %} === TOP === {% endcomment %}
+            {% csrf_token %}
+            <input type=submit class="d-none">
+
+            <div class="arc-sticky">
+                <div class="row page-title-margin ">
+                    <div class="col">
+                        <a class="page-title-back" href="{% url 'requests' %}{% if mode %}?mode={{ mode }}{% endif %}">
+                            < {% trans "Back to Requests" %}
+                        </a>
+                        <div class="page-title">
+                            {% trans title %}
+                        </div>
+                    </div>
+                    <div class="col text-right">
+                        <a class="btn btn-outline-primary" href="{% if form.instance.pk %}{% url 'request-detail' pk=form.instance.pk %}{% else %}{% url 'requests' %}{% endif %}">cancel</a>
+                        <button class="btn btn-primary" type="submit" name="submit">save</button>
+                        <button class="btn btn-primary" type="submit" name="add-new" value="add-new">save & add new</button>
+                    </div>
+                </div>
+            </div>
+
+            {% comment %} === ERRORS === {% endcomment %}
+            <div class="form-block-wrapper">
+                {% if form.non_field_errors %}
+                    <div class="form-block-errors">
+                        <ul class="list-unstyled2 my-0">
+                            {% for error in form.non_field_errors %}
+                                <li class="text-danger">
+                                    {{ error }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% comment %} === REQUESTER BLOCK === {% endcomment %}
+            <div class="form-block-wrapper">
+                <div class="form-block">
+                    <div class="row">
+                        <div class="col col-md-10 mx-auto">
+                            <div class="form-block__title">{% trans "Requester" %}</div>
+                            {% include "matchmaking/includes/form-request-supply/author_block.html" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% comment %} === REQUEST BLOCK === {% endcomment %}
+            <div class="form-block-wrapper">
+                <div class="form-block">
+                    <div class="row">
+                        <div class="col col-md-10 mx-auto">
+                            <div class="form-block__title">{% trans "Request" %}</div>
+                            {% include "matchmaking/includes/form-request-supply/item_block.html" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {% comment %} === DETAILS BLOCK === {% endcomment %}
+            <div class="form-block-wrapper">
+                <div class="form-block">
+                    <div class="row">
+                        <div class="col col-md-10 mx-auto">
+                            <div class="form-block__title">{% trans "Details" %}</div>
+                            {% include "app/includes/forms/field.html" with field=form.priority %}
+                            {% include "app/includes/forms/field-type-label.html"  with field=form.sensitive class="request-form-sensivity" %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+{% endblock %}
+
+
+{% block script %}
+    {% include "matchmaking/includes/form-request-supply/script.html" %}
+{% endblock %}
+

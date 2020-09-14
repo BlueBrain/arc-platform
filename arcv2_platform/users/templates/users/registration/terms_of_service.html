@@ -1,0 +1,34 @@
+{% extends 'layout.html' %}
+{% load i18n %}
+
+{% block content %}
+    <div class="container pt-5">
+        <h1 class="mb-4">Terms of Use</h1>
+
+        <p class="mb-4">Please read and accept the terms of use before accessing the platform.</p>
+
+        <div class="tos-container mb-4">
+            <!-- Terms of use -->
+        </div>
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-check mb-4">
+                <input type="checkbox" class="form-check-input" id="tos_checkbox" v-model="tos_accepted"
+                       name="tos_accepted">
+                <label for="tos_checkbox" class="form-check-label">{% trans 'I accept the terms of use' %}</label>
+            </div>
+
+            <button class="btn btn-primary" type="submit" name="submit" :disabled="!tos_accepted">
+                {% trans 'Submit' %}
+            </button>
+        </form>
+
+    </div>
+{% endblock %}
+
+{% block script %}
+    <script>
+        arc.page.terms_of_service();
+    </script>
+{% endblock %}

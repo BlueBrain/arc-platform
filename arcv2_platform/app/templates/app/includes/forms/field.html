@@ -1,0 +1,23 @@
+{% load widget_tweaks %}
+
+{% if not field.is_hidden %}
+    <div class="form-group" {% if v_if %}v-if="{{ v_if }}"{% endif %}>
+
+        <label for="{{ field.id_for_label }}"
+               class="{% if field.errors %}text-danger{% endif %}">{{ field.label }}
+            {% if field.field.required or force_required %}<span class="text-danger">*</span>{% endif %}</label>
+
+        {% with WIDGET_ERROR_CLASS='is-invalid' %}
+            {% render_field field class="form-control" %}
+        {% endwith %}
+
+        {% if field.errors %}
+            {% include "app/includes/forms/field-errors.html" %}
+        {% else %}
+            <small class="form-text text-muted">{{ field.help_text }}</small>
+        {% endif %}
+
+    </div>
+{% else %}
+    {% render_field field %}
+{% endif %}

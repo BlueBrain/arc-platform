@@ -1,0 +1,8 @@
+Dear requester,
+
+Your request has been unfortunately rejected by the validators{% if not request.status_reason_sensitive %} for the following reason: {{ request.status_reason }}{% endif %}.
+{{ deployment_base_url }}/requests/{{ request.id }}
+
+
+Regards,
+the ARC platform

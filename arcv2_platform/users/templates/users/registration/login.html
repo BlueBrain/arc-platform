@@ -1,0 +1,74 @@
+{% extends 'layout.html' %}
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <form action="{% url 'login' %}" method="post">
+        {% csrf_token %}
+        <div class="container">
+
+            <div class="row page-title-margin">
+                <div class="col">
+                    <a class="page-title-back" href="{% url 'dashboard' %}">
+                        < {% trans "Dashboard" %}
+                    </a>
+                    <div class="page-title">
+                        {% trans "Login" %}
+                    </div>
+                </div>
+            </div>
+            <div class="form-block-wrapper">
+                <div class="form-block">
+                    <div class="row">
+                        <div class="col col-md-10 mx-auto">
+                            <div class="row">
+                                <div class="col">
+                                    {% include "app/includes/forms/field.html" with field=form.username %}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    {% include "app/includes/forms/field.html"  with field=form.password %}
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <button type="submit" class="btn btn-primary text-uppercase small">Login</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            {% comment %} === ERRORS === {% endcomment %}
+            <div class="form-block-wrapper">
+                {% if form.non_field_errors %}
+                    <div class="form-block-errors">
+                        <ul class="list-unstyled2 my-0">
+                            {% for error in form.non_field_errors %}
+                                <li class="text-danger">
+                                    {{ error }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+                {% if messages %}
+                    <div class="form-block-errors">
+                        <ul class="list-unstyled2 my-0">
+                            {% for message in messages %}
+                                <li class="text-danger">
+                                    {{ message }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </form>
+{% endblock %}

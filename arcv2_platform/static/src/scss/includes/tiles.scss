@@ -1,0 +1,26 @@
+
+.tile {
+    background: white;
+    border-left: 8px solid $primary;
+    margin-bottom: 20px;
+    padding: 20px;
+
+
+    .tile__title {
+        color: $dark-blue;
+        font-size: 22px;
+        letter-spacing: 1px;
+    }
+
+    .tile__subtitle {
+        color: $dark-blue;
+        letter-spacing: 1px;
+    }
+
+    .tile__count {
+        color: $dark-blue;
+        font-size: 44px;
+        letter-spacing: 1.38px;
+        line-height: 48px;
+    }
+}

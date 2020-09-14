@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  web:
+    command: bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000'
+    ports:
+      - "8000:8000"
+    environment:
+      SERVER_ENV: 'local'
+    volumes:
+      - .:/code
+      - ./logs:/code/logs
+  web-parcel:
+    build:
+      context: .
+      dockerfile: Dockerfile-parcel
+    depends_on:
+      - db
+    restart: on-failure
+    volumes:
+      - ./arcv2_platform/static:/code/arcv2_platform/static

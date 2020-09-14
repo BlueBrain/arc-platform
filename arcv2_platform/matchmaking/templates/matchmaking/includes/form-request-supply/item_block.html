@@ -1,0 +1,34 @@
+{% load i18n %}
+
+{% include "app/includes/forms/field.html" with field=form.resource %}
+{% include "app/includes/forms/field.html" with field=form.resourceType %}
+
+{% include "app/includes/forms/field.html" with field=form.category v_if='!product_is_missing' force_required='True' %}
+{% include "app/includes/forms/field.html" with field=form.item v_if='!product_is_missing' force_required='True' %}
+
+{% include "app/includes/forms/field.html" with field=form.new_category v_if='product_is_missing' %}
+{% include "app/includes/forms/field.html" with field=form.new_category_item v_if='product_is_missing' %}
+
+{% if form.product_is_missing %}
+    <div class="form-check mb-4">
+        <input type="checkbox" class="form-check-input" id="{{ form.product_is_missing.id_for_label }}"
+               v-model="product_is_missing" name="{{ form.product_is_missing.name }}">
+        <label for="{{ form.product_is_missing.id_for_label }}"
+               class="form-check-label">{% trans 'My item is not in the list' %}</label>
+    </div>
+{% endif %}
+
+{% if form.item_catalog_number %}
+    {% include "app/includes/forms/field.html" with field=form.item_catalog_number %}
+{% endif %}
+
+<div class="alert alert-warning" v-if="comment">
+    <b>{% trans 'Additional information' %}:</b>
+    {% verbatim %}{{ comment }}{% endverbatim %}
+</div>
+
+<div class="row">
+    <div class="col col-md-6">
+        {% include "app/includes/forms/field.html" with field=form.quantity %}
+    </div>
+</div>

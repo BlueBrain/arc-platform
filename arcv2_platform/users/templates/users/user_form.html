@@ -1,0 +1,125 @@
+{% extends 'layout.html' %}
+
+{% load i18n %}
+{% load widget_tweaks %}
+
+{% block content %}
+    <div class="container">
+
+        <form method="post" novalidate>
+
+            {% comment %} === TOP === {% endcomment %}
+            {% csrf_token %}
+            <input type=submit class="d-none">
+
+            <div class="row page-title-margin">
+                <div class="col">
+                    <a class="page-title-back" href="{% url 'users' %}">
+                        < {% trans "Back to Users" %}
+                    </a>
+                    <div class="page-title">
+                        {% trans title %}
+                    </div>
+                </div>
+                <div class="col text-right">
+                    <a class="btn btn-outline-primary" href="{% url 'users' %}">{% trans 'Cancel' %}</a>
+                    <button class="btn btn-primary" type="submit" name="submit">{% trans 'Save' %}</button>
+                </div>
+            </div>
+
+            {% comment %} === ERRORS === {% endcomment %}
+            <div class="form-block-wrapper">
+                {% if form.non_field_errors %}
+                    <div class="form-block-errors">
+                        <ul class="list-unstyled2 my-0">
+                            {% for error in form.non_field_errors %}
+                                <li class="text-danger">
+                                    {{ error }}
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                {% endif %}
+            </div>
+
+            {% comment %} === USER BLOCK === {% endcomment %}
+            <div class="form-block-wrapper">
+                <div class="form-block">
+                    <div class="row">
+                        <div class="col col-md-10 mx-auto">
+                            <div class="form-block__title">{% trans "User" %}</div>
+
+                            <div class="row">
+                                <div class="col">
+                                    {% include "app/includes/forms/field.html" with field=form.email %}
+                                </div>
+
+                                {% comment %} === TODO remove when switch aai is up === {% endcomment %}
+                                <div class="col" >
+                                    {% include "app/includes/forms/field.html" with field=form.password %}
+                                </div>
+                            </div>
+
+                            {% comment %} === TODO remove when switch aai is up === {% endcomment %}
+                            <div class="row">
+                                <div class="col">
+                                    {% include "app/includes/forms/field.html" with field=form.firstname %}
+                                </div>
+                                <div class="col">
+                                    {% include "app/includes/forms/field.html" with field=form.lastname %}
+                                </div>
+                            </div>
+
+                            {% comment %} === TODO remove when switch aai is up === {% endcomment %}
+                            <div class="row">
+                                <div class="col">
+                                    {% include "app/includes/forms/field.html" with field=form.affiliation %}
+                                </div>
+                                <div class="col">
+                                    {% include "app/includes/forms/field.html" with field=form.phone %}
+                                </div>
+                            </div>
+
+                            {% comment %} === Custom role select input === {% endcomment %}
+                            <div class="row">
+                                <div class="col">
+                                    <div class="form-group">
+                                        {% with form.role as field %}
+                                            <label>
+                                                {% trans "Role" %} <span class="text-danger">*</span>
+                                            </label>
+
+                                            {% with WIDGET_ERROR_CLASS='is-invalid' %}
+                                                <select class="form-control" name="role" {% if roles|length == 0 %}disabled{% endif %}>
+                                                    {% for option in roles %}
+                                                        {% include "app/includes/forms/forms-select-option.html" with selected=roleselected value=option.0 text=option.1 %}
+                                                    {% endfor %}
+                                                </select>
+                                            {% endwith %}
+
+                                            {% if field.errors %}
+                                                {% include "app/includes/forms/field-errors.html" %}
+                                            {% else %}
+                                                <small class="form-text text-muted">{{ field.help_text }}</small>
+                                            {% endif %}
+
+                                        {% endwith %}
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    {% include "app/includes/forms/field.html" with field=form.is_super_admin %}
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br/>
+            <br/>
+            <br/>
+        </form>
+
+    </div>
+{% endblock %}

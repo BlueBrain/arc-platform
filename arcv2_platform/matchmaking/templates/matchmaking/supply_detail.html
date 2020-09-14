@@ -1,0 +1,122 @@
+{% extends 'layout.html' %}
+
+{% load i18n %}
+{% load widget_tweaks %}
+
+
+{% block content %}
+    <div class="container">
+        <div class="arc-sticky">
+            <div class="row page-title-margin">
+                <div class="col">
+                    <a class="page-title-back" href="{% url 'supplies' %}">
+                        < {% trans "Back to Supplies" %}
+                    </a>
+                    <div class="page-title">
+                        {% blocktrans with resource_type=object.resource id=object.id %}
+                            {{ resource_type }} supply {{ id }}
+                        {% endblocktrans %}
+                    </div>
+                </div>
+                <div class="col text-right">
+                    {% if object.can_be_edited %}
+                        <a class="btn btn-outline-primary" href="{% url 'supplies-edit' object.id %}">{% trans "Edit" %}</a>
+                    {% endif %}
+
+                    {% if object.can_be_closed %}
+                        <button
+                            class="btn btn-{{ object.is_attributed|yesno:'warning,outline-primary' }}"
+                            data-toggle="modal"
+                            data-target="#close-modal"
+                        >
+                            {% trans "Close supply" %}
+                        </button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+
+        <div class="main-info-status request-status-background {% if object.is_available %} request-status-background-available {% elif object.is_ongoing %} request-status-background-ongoing {% elif object.is_attributed %} request-status-background-attributed {% endif %}">
+            <div>{{ object.get_status_display|upper }}</div>
+        </div>
+
+        {% trans "Add supply" as button_text %}
+        {% include 'matchmaking/includes/detail-request-supply/main-info.html' with requestedOrAvailable="available" button_text=button_text base_url_name="supplies-create" %}
+
+        {% include 'matchmaking/includes/detail-request-supply/additional-info.html' with item=object %}
+
+        {% if user.is_privileged %}
+            <div class="row page-title-margin">
+                <div class="col">
+                    <div class="page-title">
+                        Attributed requests ({{ attributed_requests|length }})
+                    </div>
+                </div>
+            </div>
+
+            {% if attributed_requests|length == 0 %}
+
+                <p class="no-available-supply">{% trans "There is no attributed request for this supply." %}</p>
+
+            {% else %}
+
+                <table class="table table-borderless arc-table">
+                    <tbody>
+
+                    {% for request in attributed_requests %}
+                        <tr>
+                            <td>
+                                <a data-toggle="collapse" href="#log-block-{{ request.id }}" role="button" aria-expanded="false">
+                                    <i class="fas fa-chevron-right chevron-right"></i>
+                                    <i class="fas fa-chevron-down chevron-down"></i>
+                                </a>
+                            </td>
+                            <td><a href="{% url 'request-detail' pk=request.id %}" class="link">{{ request.id }}</a></td>
+                            <td>{{ request.creation_time | date:"d/m/Y H:i" }}</td>
+                            <td>{{ request.resource.name }}</td>
+                            <td>{{ request.category.name }} {{ request.item.name }}</td>
+                            <td class="text-right">
+                                {{ request.quantity_progress }}
+                            </td>
+                            <td>
+                                <span class="badge badge-{{ request.priority }}">
+                                    {{ request.get_priority_display }}
+                                </span>
+                            </td>
+                            <td>
+                                <span class="request-status request-status-{{ request.status }}">
+                                    {{ request.get_status_display }}
+                                </span>
+                            </td>
+                            <td class="text-right">
+                            </td>
+                            <td class="text-left">
+                            </td>
+                        </tr>
+                        {% include 'matchmaking/includes/detail-request-supply/detailed-row.html' with item=request colspan=10 %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+
+            {% endif %}
+        {% endif %}
+
+    </div>
+
+    {% trans "Close supply" as title %}
+    {% trans "The supply will be closed and will no longer be editable nor available for requests." as message %}
+    {% trans "Current supply has a match in progress, are you absolutely sure?" as attribution_warning %}
+    {% url "supply-close" object.id as url %}
+    {% if object.is_attributed %}
+        {% with message|add:'<br/><br/><span class="badge badge-warning mr-1">!</span>'|add:attribution_warning as message %}
+            {% include 'app/includes/modals/simple-modal.html' with id='close-modal' title=title message=message url=url %}
+        {% endwith %}
+    {% else %}
+        {% include 'app/includes/modals/simple-modal.html' with id='close-modal' title=title message=message url=url %}
+    {% endif %}
+
+    {% trans "Archive supply" as title %}
+    {% trans "It will no longer be possible to edit the supply nor to find an attribution." as message %}
+    {% url "supply-archive" object.id as url %}
+    {% include 'app/includes/modals/simple-modal.html' with id='archive-modal' title=title message=message url=url %}
+{% endblock %}

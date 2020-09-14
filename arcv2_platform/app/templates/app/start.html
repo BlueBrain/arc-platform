@@ -1,0 +1,148 @@
+{% load static %}
+{% load i18n %}
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>ArcV2</title>
+    <link rel="stylesheet" href="{% static "assets/index.css" %}">
+    <link rel="stylesheet" href="{% static "assets/fontawesome.css" %}">
+    <link rel="apple-touch-icon" sizes="180x180" href="{% static "favicon/apple-touch-icon.png" %}">
+    <link rel="icon" type="image/png" sizes="32x32" href="{% static "favicon/favicon-32x32.png" %}">
+    <link rel="icon" type="image/png" sizes="16x16" href="{% static "favicon/favicon-16x16.png" %}">
+    <link rel="manifest" href="{% static "favicon/site.webmanifest" %}">
+    <meta name="msapplication-TileColor" content="#3564C2">
+    <meta name="theme-color" content="#3564C2">
+    <style>
+        @font-face {
+            font-family: SuisseIntlRegular;
+            src: url('{% static 'assets/fonts/SuisseIntl-Regular.otf' %}');
+        }
+
+        @font-face {
+            font-family: SuisseIntlBook;
+            src: url('{% static 'assets/fonts/SuisseIntl-Book.otf' %}');
+        }
+
+        @font-face {
+            font-family: SuisseIntlSemiBold;
+            src: url('{% static 'assets/fonts/SuisseIntl-SemiBold.otf' %}');
+        }
+    </style>
+</head>
+
+<body class="home-body">
+
+<div class="home-content">
+
+    <div class="home-nav">
+        <img src="{% static 'img/ARC.svg' %}" alt="ARC" class="arc-logo-home">
+
+        <div class="login-buttons">
+            {% if not request.user.is_authenticated %}
+                <a class="btn btn-primary text-uppercase small"
+                   href="{% url 'sso-login' %}">{% trans 'Switch Login' %}</a>
+                {% if config.allow_password_login %}
+                    <a class="nav-link link ml-2"
+                       href="{% url 'login' %}">{% trans 'Password login' %}</a>
+                {% endif %}
+            {% else %}
+                <a class="btn btn-primary text-uppercase small"
+                   href="{% url 'dashboard' %}">{% trans 'Go to dashboard' %}</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="bg-holder">
+        <img class="home-bg" alt="background" src="{% static 'img/home-bg.svg' %}">
+
+        <!-- Logos can be placed here -->
+
+        <span class="home-title">
+            {% blocktrans %}
+                Welcome to the Academic Resources Platform for COVID-19
+            {% endblocktrans %}
+        </span>
+
+        <span class="home-text">
+            {% blocktrans %}
+                The Academic Resources for COVID-19 (ARC) is an online
+                platform to match equipment, consumables, reagents and
+                other critical resources needed by diagnostic laboratories involved
+                in combating the Sars-CoV-2 virus with academic
+                groups who are able and willing to provide them.
+            {% endblocktrans %}
+        </span>
+
+        <div class="home-separator"></div>
+
+        <span class="home-subtitle">
+            {% blocktrans %}
+                Matching requests with supplies - together we can fight COVID-19
+            {% endblocktrans %}
+        </span>
+
+    </div>
+
+    <div class="home-explanations">
+        <div class="row">
+            <div class="col col-8">
+                <span class="home-explanation-title">
+                    {% blocktrans %}
+                        How does the platform work?
+                    {% endblocktrans %}
+                </span>
+                <!-- <p class="home-explanation-text mt-4">
+                    {% blocktrans %}
+                        Home explanation text
+                    {% endblocktrans %}
+                </p> -->
+            </div>
+            <div class="col col-4 pl-5 pr-5">
+                <div class="row">
+                    <span class="home-explanation-title">{% trans 'Requests' %}</span>
+                    <p class="home-explanation-text">
+                        {% blocktrans %}
+                            Prioritized requests are posted by Labor Spiez
+                        {% endblocktrans %}
+                    </p>
+                </div>
+                <div class="row">
+                    <span class="home-explanation-title">{% trans 'Supplies' %}</span>
+                    <p class="home-explanation-text">
+                        {% blocktrans %}
+                            Academic groups with suitable resources are encouraged to log on and respond to
+                            requests
+                        {% endblocktrans %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="home-footer">
+        <div class="row">
+            <!-- Logos can be placed here -->
+            <div class="col-4">
+                <a href="{% url 'impressum' %}" class="footer-link">{% trans 'Impressum' %}</a>
+            </div>
+            <div class="col col-4">
+                        <span class="apptitext">
+                            {% blocktrans with link='<a href="https://apptitude.ch/" target="_blank">Apptitude</a>' %}
+                                Designed and developed by {{ link }}
+                            {% endblocktrans %}
+                        </span>
+            </div>
+        </div>
+    </div>
+
+    <div class="home-content mt-4">
+        <ul class="footer-help-block ml-5">
+            <!-- <li>Technical support: <a href="mailto:techsupport@arc">techsupport@arc</a></li> -->
+        </ul>
+    </div>
+</div>
+</body>
+
+</html>
+
