@@ -228,7 +228,7 @@ in the `web` container (accessible with `docker-compose exec web bash`).
 
 ## Citation
 
-we kindly ask you to cite the following publication:
+We kindly ask you to cite the following publication:
 
 ```
 @ARTICLE{10.3389/fpubh.2021.607677,
